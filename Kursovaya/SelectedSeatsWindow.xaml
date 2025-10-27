@@ -1,0 +1,16 @@
+﻿<Window x:Class="Kursovaya.SelectSeatsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Выбор мест" Height="500" Width="600"
+        Style="{DynamicResource WindowStyle}">
+    <Grid>
+        <UniformGrid Rows="10" Columns="10">
+            <!-- Здесь будут кнопки-места -->
+            <Button Content="A1" Margin="2" Click="Seat_Click" />
+            <Button Content="A2" Margin="2" Click="Seat_Click"/>
+            <!-- Остальные места -->
+        </UniformGrid>
+        <Label Name="BalanceLabel" Margin="10 10 70 70" Content="Итого:" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+        <Button Content="Подтвердить заказ" Click="ConfirmOrder_Click" Margin="10 10 10 100" HorizontalAlignment="Right" Style="{DynamicResource BaseButtonStyle}"/>
+    </Grid>
+</Window>

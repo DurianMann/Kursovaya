@@ -1,0 +1,72 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Основные цвета интерфейса -->
+    <SolidColorBrush x:Key="PrimaryColor" Color="#2196F3"/>
+    <!-- Синий основной -->
+    <SolidColorBrush x:Key="SecondaryColor" Color="#FF5722"/>
+    <!-- Оранжевый акцент -->
+    <SolidColorBrush x:Key="BackgroundBrush" Color="#FFFFFF"/>
+    <!-- Белый фон -->
+    <SolidColorBrush x:Key="ForegroundBrush" Color="#333333"/>
+    <!-- Темно-серый текст -->
+    <SolidColorBrush x:Key="DisabledBrush" Color="#CCCCCC"/>
+    <!-- Серый для отключенных элементов -->
+    <SolidColorBrush x:Key="ErrorBrush" Color="#FF0000"/>
+    <!-- Красный для ошибок -->
+
+    <!-- Цвета для состояний -->
+    <SolidColorBrush x:Key="HoverColor" Color="#E0E0E0"/>
+    <!-- Серый при наведении -->
+    <SolidColorBrush x:Key="SelectedColor" Color="#BBDEFB"/>
+    <!-- Голубой для выбранного -->
+    <SolidColorBrush x:Key="PressedColor" Color="#BBBBBB"/>
+    <!-- Серый при нажатии -->
+
+    <!-- Стили для кнопок -->
+    <Style x:Key="BaseButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource PrimaryColor}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Padding" Value="10"/>
+        <Setter Property="Margin" Value="5"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource HoverColor}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{StaticResource PressedColor}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Стиль для текстовых блоков -->
+    <Style x:Key="TextBlockStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
+        <Setter Property="Padding" Value="10"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="TextAlignment" Value="Left"/>
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground" Value="{StaticResource DisabledBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- Стили для текстовых полей -->
+    <Style x:Key="BaseTextBoxStyle" TargetType="TextBox">
+        <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource PrimaryColor}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="5"/>
+    </Style>
+
+    <!-- Стили для окон -->
+    <Style x:Key="WindowStyle" TargetType="Window">
+        <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
+    </Style>
+</ResourceDictionary>
