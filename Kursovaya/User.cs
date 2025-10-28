@@ -1,8 +1,11 @@
-﻿public class User
+﻿using Kursovaya;
+
+public class User
 {
     public string Username { get; set; }
     public string Password { get; set; }
-    private decimal _balance; 
+    private decimal _balance;
+    public List<Booking> Bookings { get; set; } = new List<Booking>();
 
     public event EventHandler BalanceChanged;
 

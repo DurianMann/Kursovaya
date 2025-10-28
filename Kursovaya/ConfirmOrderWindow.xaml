@@ -5,6 +5,7 @@
         Style="{DynamicResource WindowStyle}">
     <Grid Margin="10">
         <StackPanel>
+            
             <TextBlock Text="Подтверждение заказа" FontSize="16" Margin="0 0 0 10" Style="{DynamicResource TextBlockStyle}"/>
             <TextBlock Text="Фильм:" FontWeight="Bold"/>
             <TextBlock x:Name="FilmTitleTextBlock" Margin="20 0"/>

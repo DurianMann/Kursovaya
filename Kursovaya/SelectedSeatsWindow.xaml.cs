@@ -17,6 +17,7 @@ namespace Kursovaya
             SelectedFilm = film;
 
             CreateSeatsGrid();
+            MarkBookedSeats();
         }
 
         private void UpdatePriceLabel()
@@ -41,60 +42,89 @@ namespace Kursovaya
                 SeatsGrid.Children.Add(seatButton);
             }
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            MarkBookedSeats(); // Перепроверяем статусы при загрузке
+        }
+
+        
+
+        private void MarkBookedSeats()
+        {
+            foreach (var child in SeatsGrid.Children)
+            {
+                if (child is Button button)
+                {
+                    string seat = button.Content.ToString();
+                    // Проверяем через глобальный менеджер
+                    if (!SeatManager.IsSeatAvailable(SelectedFilm.Title, SelectedFilm.Time, seat))
+                    {
+                        button.Background = Brushes.Gray;
+                        button.IsEnabled = false;
+                        button.ToolTip = "Место занято";
+                    }
+                }
+            }
+        }
+
         private void Seat_Click(object sender, RoutedEventArgs e)
         {
             var button = (Button)sender;
-            
-                if (selectedSeats.Contains(button.Content))
+            string seat = button.Content.ToString();
+
+            if (selectedSeats.Contains(seat))
+            {
+                // Снятие выбора
+                button.Background = Brushes.White;
+                selectedSeats.Remove(seat);
+                TotalPrice -= SelectedFilm.Price;
+            }
+            else
+            {
+                // Проверка через глобальный менеджер
+                if (!SeatManager.IsSeatAvailable(SelectedFilm.Title, SelectedFilm.Time, seat))
                 {
-                    button.Background = Brushes.White;
-                    selectedSeats.Remove(button.Content.ToString());
-                    TotalPrice -= SelectedFilm.Price;
-                    UpdatePriceLabel();
+                    MessageBox.Show($"Место {seat} уже забронировано!");
+                    return;
                 }
-                else
-                {
-                    button.Background = Brushes.Red;
-                    selectedSeats.Add(button.Content.ToString());
-                    TotalPrice += SelectedFilm.Price;
-                    UpdatePriceLabel();
-                }
-            
-            
+
+                // Выбор места
+                button.Background = Brushes.Red;
+                selectedSeats.Add(seat);
+                TotalPrice += SelectedFilm.Price;
+            }
+
+            UpdatePriceLabel();
         }
+
+
 
         private void ConfirmOrder_Click(object sender, RoutedEventArgs e)
         {
-            
             if (selectedSeats.Count == 0)
             {
                 MessageBox.Show("Выберите места для бронирования!");
                 return;
             }
-            
 
-            // Передаем выбранные места и информацию о фильме на страницу подтверждения
-            var confirmWindow = new ConfirmOrderWindow
-            {
-                SelectedSeats = string.Join(", ", selectedSeats),
-                FilmTitle = SelectedFilm.Title,
-                SessionTime = SelectedFilm.Time,
-                TotalPrice = TotalPrice,
-                User = MainWindow.currentUser
-            };
+            var confirmWindow = new ConfirmOrderWindow(
+                SelectedFilm.Title,
+                SelectedFilm.Time,
+                selectedSeats,
+                TotalPrice,
+                MainWindow.currentUser
+            );
 
             confirmWindow.ShowDialog();
 
-            // Очищаем выбранные места после подтверждения
-            foreach (var seat in selectedSeats)
-            {
-                var button = FindName(seat) as Button;
-                if (button != null)
-                    button.Background = Brushes.White;
-            }
             selectedSeats.Clear();
             TotalPrice = 0;
             UpdatePriceLabel();
+            MarkBookedSeats();
+            Close();// Обновляем отображение мест
         }
+
+        
     }
 }
