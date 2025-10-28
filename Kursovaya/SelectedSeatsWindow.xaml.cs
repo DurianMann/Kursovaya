@@ -10,16 +10,37 @@ namespace Kursovaya
         public Film SelectedFilm { get; set; }
         public decimal TotalPrice { get; set; }// Добавляем свойство для фильма
 
-        public SelectSeatsWindow()
+        public SelectSeatsWindow(Film film)
         {
             InitializeComponent();
+
+            SelectedFilm = film;
+
+            CreateSeatsGrid();
         }
 
         private void UpdatePriceLabel()
         {
             BalanceLabel.Content = $"Итого: {TotalPrice} руб.";
         }
+        private void CreateSeatsGrid()
+        {
+            // Пример создания 10 мест
+            for (int i = 1; i <= 80; i++)
+            {
+                Button seatButton = new Button
+                {
+                    Content = $"М{i}",
+                    Width = 30,
+                    Height = 30,
+                    Margin = new Thickness(2),
+                    Background = Brushes.White
+                };
 
+                seatButton.Click += Seat_Click;
+                SeatsGrid.Children.Add(seatButton);
+            }
+        }
         private void Seat_Click(object sender, RoutedEventArgs e)
         {
             var button = (Button)sender;
@@ -59,7 +80,7 @@ namespace Kursovaya
                 FilmTitle = SelectedFilm.Title,
                 SessionTime = SelectedFilm.Time,
                 TotalPrice = TotalPrice,
-                UserBalance = MainWindow.UserBalance
+                User = MainWindow.currentUser
             };
 
             confirmWindow.ShowDialog();

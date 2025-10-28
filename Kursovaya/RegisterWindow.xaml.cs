@@ -6,26 +6,32 @@ namespace Kursovaya
     {
         private Dictionary<string, User> users;
 
-        public RegisterWindow()
+        public RegisterWindow(Dictionary<string, User> userDictionary)
         {
             InitializeComponent();
-            users = (Application.Current.Resources["Users"] as Dictionary<string, User>) ??
-                    new Dictionary<string, User>();
+            users = userDictionary;
         }
 
         private void Register_Click(object sender, RoutedEventArgs e)
         {
-            if (users.ContainsKey(txtRegisterUsername.Text))
+            string username = txtRegisterUsername.Text;
+            string password = txtRegisterPassword.Password;
+
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
-                MessageBox.Show("Пользователь с таким логином уже существует");
+                MessageBox.Show("Введите логин и пароль!");
                 return;
             }
 
-            var newUser = new User(txtRegisterUsername.Text, txtRegisterPassword.Password);
-            users.Add(txtRegisterUsername.Text, newUser);
-            Application.Current.Resources["Users"] = users;
-            MessageBox.Show("Регистрация успешна!");
+            if (users.ContainsKey(username))
+            {
+                MessageBox.Show("Пользователь с таким логином уже существует!");
+                return;
+            }
+
+            users.Add(username, new User(username, password));
             Close();
         }
     }
+
 }

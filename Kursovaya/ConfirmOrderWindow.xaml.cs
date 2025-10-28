@@ -10,30 +10,46 @@ namespace Kursovaya
         public string SessionTime { get; set; }
         public string SelectedSeats { get; set; }
         public decimal TotalPrice { get; set; }
-        public decimal UserBalance { get; set; }
+        public User User { get; set; }
 
         public ConfirmOrderWindow()
         {
             InitializeComponent();
         }
-
-        private void Confirm_Click(object sender, RoutedEventArgs e)
+        public ConfirmOrderWindow(string filmTitle, string sessionTime, string selectedSeats,
+            decimal totalPrice, User user) : this()
         {
-            if (TotalPrice > UserBalance)
-            {
-                MessageBox.Show("Недостаточно средств на балансе!");
-                return;
-            }
+            FilmTitle = filmTitle;
+            SessionTime = sessionTime;
+            SelectedSeats = selectedSeats;
+            TotalPrice = totalPrice;
+            User = user;
+
+            UpdateUI();
+        }
+        private void UpdateUI()
+        {
             FilmTitleTextBlock.Text = FilmTitle;
             SessionTimeTextBlock.Text = SessionTime;
             SelectedSeatsTextBlock.Text = SelectedSeats;
             TotalPriceTextBlock.Text = $"{TotalPrice} руб.";
-            MainWindow.UserBalance -= TotalPrice;
-            BalanceTextBlock.Text = $"{MainWindow.UserBalance} руб.";
-            MessageBox.Show($"Заказ успешно оформлен!\n" +
-                       $"Списано: {TotalPrice} руб.\n" +
-                       $"Остаток: {MainWindow.UserBalance} руб.");
-            BalanceTextBlock.Text = $"{UserBalance} руб.";
+            BalanceTextBlock.Text = $"{User.Balance} руб.";
+            UpdateUI();
+        }
+        private void Confirm_Click(object sender, RoutedEventArgs e)
+        {
+            FilmTitleTextBlock.Text = FilmTitle;
+            SessionTimeTextBlock.Text = SessionTime;
+            SelectedSeatsTextBlock.Text = SelectedSeats;
+            TotalPriceTextBlock.Text = $"{TotalPrice} руб.";
+            BalanceTextBlock.Text = $"{User.Balance - TotalPrice} руб.";
+            
+            if (TotalPrice > User.Balance)
+            {
+                MessageBox.Show("Недостаточно средств на балансе!");
+                return;
+            }
+            User.Balance -= TotalPrice;
             Close();
         }
 

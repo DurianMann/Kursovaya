@@ -1,0 +1,16 @@
+﻿<Window x:Class="Kursovaya.TopUpWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Пополнение баланса" Height="300" Width="300">
+    <Grid Margin="20">
+        <StackPanel>
+            <TextBlock Text="Текущий баланс: " Style="{DynamicResource LoginStyle}"/>
+            <TextBlock x:Name="lblCurrentBalance" Margin="0 5" Style="{DynamicResource LoginStyle}"/>
+
+            <TextBlock Text="Сумма пополнения:" Style="{DynamicResource LoginStyle}"/>
+            <TextBox x:Name="txtAmount" Margin="0 5" Style="{DynamicResource BaseTextBoxStyle}"/>
+
+            <Button Content="Пополнить" Click="TopUp_Click" Margin="0 20" Style="{DynamicResource BaseButtonStyle}"/>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -13,37 +13,43 @@ namespace Kursovaya
         public LoginWindow()
         {
             InitializeComponent();
-            // Добавляем тестового пользователя
-            users.Add("admin", new User("admin", "admin"));
         }
 
         private void Login_Click(object sender, RoutedEventArgs e)
         {
-            var user = users.FirstOrDefault(x => x.Key == txtUsername.Text);
-            if (user.Value != null && user.Value.Password == txtPassword.Password)
-            {
-                currentUser = user.Value;
+            string enteredUsername = txtUsername.Text;
+            string enteredPassword = txtPassword.Password;
 
-                try
-                {
-                    // Попытка открыть главное окно
-                    new MainWindow(currentUser).Show();
-                    Close();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Ошибка при открытии главного окна: " + ex.Message);
-                }
-            }
-            else
+            if (!users.TryGetValue(enteredUsername, out User user))
             {
-                MessageBox.Show("Неверный логин или пароль");
+                MessageBox.Show("Пользователь не найден!");
+                return;
+            }
+
+            if (user.Password != enteredPassword)
+            {
+                MessageBox.Show("Неверный пароль!");
+                return;
+            }
+
+            currentUser = user;
+
+            try
+            {
+                new MainWindow(currentUser).Show();
+                Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка: {ex.Message}");
             }
         }
         private void Register_Click(object sender, RoutedEventArgs e)
         {
-            new RegisterWindow().Show();
+            // В MainWindow или другом месте, где происходит вызов регистрации
+            var registerWindow = new RegisterWindow(users);
+            registerWindow.ShowDialog();
         }
-
     }
+
 }
