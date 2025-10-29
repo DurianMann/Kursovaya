@@ -1,0 +1,29 @@
+﻿<Window x:Class="Kursovaya.PassMovieWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Kursovaya"
+        mc:Ignorable="d"
+        Title="PassMovieWindow" Height="450" Width="800">
+    <Grid>
+        <ScrollViewer x:Name="scrollViewer" VerticalScrollBarVisibility="Auto">
+        <ListBox x:Name="PassesList" PreviewMouseWheel="PassesListPreviewMouseWheel">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                            <TextBlock Text="Фильм:" FontWeight="Bold"/>
+                            <TextBlock x:Name="FilmTitleTextBlock" Margin="20 0"/>
+
+                            <TextBlock Text="Сеанс:" FontWeight="Bold"/>
+                            <TextBlock x:Name="SessionTimeTextBlock" Margin="20 0"/>
+
+                            <TextBlock Text="Выбранные места:" FontWeight="Bold"/>
+                            <TextBlock x:Name="SelectedSeatsTextBlock" Margin="20 0"/>
+                        </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        </ScrollViewer>
+    </Grid>
+</Window>

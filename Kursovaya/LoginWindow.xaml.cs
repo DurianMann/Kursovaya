@@ -46,7 +46,7 @@ namespace Kursovaya
         }
         private void Register_Click(object sender, RoutedEventArgs e)
         {
-            // В MainWindow или другом месте, где происходит вызов регистрации
+            // Вызываем диалог с окном, где происходит регистрация
             var registerWindow = new RegisterWindow(users);
             registerWindow.ShowDialog();
         }
