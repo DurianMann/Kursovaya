@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using Kursovaya;
 
@@ -7,12 +8,13 @@ namespace Kursovaya
 {
     public partial class LoginWindow : Window
     {
-        private Dictionary<string, User> users = new Dictionary<string, User>();
+        private Dictionary<string, User> users = Users.users;
         private User currentUser;
-
+        
         public LoginWindow()
         {
             InitializeComponent();
+            this.DataContext = this;
         }
 
         private void Login_Click(object sender, RoutedEventArgs e)
@@ -37,7 +39,7 @@ namespace Kursovaya
             try
             {
                 new MainWindow(currentUser).Show();
-                Close();
+                this.Close();
             }
             catch (Exception ex)
             {

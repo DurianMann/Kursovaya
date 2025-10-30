@@ -29,7 +29,7 @@ namespace Kursovaya
                 return;
             }
 
-            users.Add(username, new User(username, password));
+            Users.users.Add(username, new User(username, password));
             Close();
         }
     }

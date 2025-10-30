@@ -21,6 +21,7 @@ namespace Kursovaya
         {
             InitializeComponent();
             currentUser = user;
+            LoginLabel.Text = user.Username;
             currentUser.BalanceChanged += (sender, e) => UpdateBalanceLabel();
             UpdateBalanceLabel();
             FilmList.Focus();
@@ -43,6 +44,13 @@ namespace Kursovaya
                 scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - 25);
             else
                 scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset + 25);
+        }
+        private void LogOut_Click(object sender, RoutedEventArgs e)
+        {
+            currentUser = null;
+            LoginWindow loginWindow = new LoginWindow();
+            loginWindow.Show();
+            Close();
         }
         private void TopUp_Click(object sender, RoutedEventArgs e)
         {

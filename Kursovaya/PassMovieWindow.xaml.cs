@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,7 @@ namespace Kursovaya
     public partial class PassMovieWindow : Window
     {
         private User _user;
+        public List<Booking> Bookings { get; set; }
         public string FilmTitle { get; set; }
         public string SessionTime { get; set; }
         public List<string> SelectedSeats { get; set; }
@@ -31,6 +33,9 @@ namespace Kursovaya
         public PassMovieWindow(User user) : this()
         {
             _user = user;
+            Bookings = user.Bookings;
+            FilmTitle = Bookings.GetType().ToString();
+            Debug.WriteLine(FilmTitle);
         }
 
         public void PassesListPreviewMouseWheel(object sender, MouseWheelEventArgs e)

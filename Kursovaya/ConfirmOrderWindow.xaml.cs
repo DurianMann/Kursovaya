@@ -63,7 +63,7 @@ namespace Kursovaya
             };
 
             // Сохраняем в историю пользователя
-            ThisUser.Bookings.Add(booking);
+            MainWindow.currentUser.Bookings.Add(booking);
             ThisUser.Balance -= TotalPrice;
             Close();
         }
