@@ -13,7 +13,7 @@ namespace Kursovaya
         public SelectSeatsWindow(Film film)
         {
             InitializeComponent();
-
+            this.DataContext = this;
             SelectedFilm = film;
 
             CreateSeatsGrid();
@@ -114,6 +114,7 @@ namespace Kursovaya
                 selectedSeats,
                 TotalPrice,
                 MainWindow.currentUser
+                
             );
 
             confirmWindow.ShowDialog();

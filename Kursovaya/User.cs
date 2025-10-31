@@ -9,6 +9,14 @@ public class User
 
     public event EventHandler BalanceChanged;
 
+    public class Booking
+    {
+        public string FilmTitle { get; set; }
+        public string SessionTime { get; set; }
+        public List<string> Seats { get; set; }
+        public decimal TotalPrice { get; set; }
+        public DateTime BookingDate { get; set; }
+    }
     public decimal Balance
     {
         get => _balance;

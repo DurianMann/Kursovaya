@@ -10,6 +10,7 @@ namespace Kursovaya
         {
             InitializeComponent();
             users = userDictionary;
+            this.DataContext = this;
         }
 
         private void Register_Click(object sender, RoutedEventArgs e)

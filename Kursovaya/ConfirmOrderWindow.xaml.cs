@@ -11,10 +11,13 @@ namespace Kursovaya
         public List<string> SelectedSeats { get; set; }
         public decimal TotalPrice { get; set; }
         public User ThisUser { get; set; }
+        public DateTime BookingDate { get; set; } = DateTime.Now;
+
 
         public ConfirmOrderWindow()
         {
             InitializeComponent();
+            this.DataContext = this;
         }
         public ConfirmOrderWindow(string filmTitle, string sessionTime, List<string> selectedSeats,
             decimal totalPrice, User user) : this()
@@ -33,16 +36,11 @@ namespace Kursovaya
             SessionTimeTextBlock.Text = SessionTime;
             SelectedSeatsTextBlock.Text = string.Join(", ", SelectedSeats);
             TotalPriceTextBlock.Text = $"{TotalPrice} руб.";
-            BalanceTextBlock.Text = $"{ThisUser.Balance} руб.";
+            BalanceTextBlock.Text = $"{ThisUser.Balance - TotalPrice} руб.";
         }
         private void Confirm_Click(object sender, RoutedEventArgs e)
         {
-            FilmTitleTextBlock.Text = FilmTitle;
-            SessionTimeTextBlock.Text = SessionTime;
-            SelectedSeatsTextBlock.Text = SelectedSeats.ToString();
-            TotalPriceTextBlock.Text = $"{TotalPrice} руб.";
-            BalanceTextBlock.Text = $"{ThisUser.Balance - TotalPrice} руб.";
-            
+           
             if (TotalPrice > ThisUser.Balance)
             {
                 MessageBox.Show("Недостаточно средств на балансе!");
@@ -54,18 +52,26 @@ namespace Kursovaya
                 SeatManager.BookSeat(FilmTitle, SessionTime, seat);
             }
             // Создаем запись о бронировании
-            var booking = new Booking
+            User.Booking booking = new User.Booking
             {
                 FilmTitle = FilmTitle,
                 SessionTime = SessionTime,
                 Seats = SelectedSeats,
-                TotalPrice = TotalPrice
+                TotalPrice = TotalPrice,
+                BookingDate = BookingDate
             };
 
             // Сохраняем в историю пользователя
-            MainWindow.currentUser.Bookings.Add(booking);
-            ThisUser.Balance -= TotalPrice;
-            Close();
+            if (booking != null && ThisUser.Bookings != null)
+            {
+                ThisUser.Bookings.Add(booking);
+                ThisUser.Balance -= TotalPrice;
+                Close();
+            }
+            else
+            {
+                MessageBox.Show("Произошла ошибка при покупке билета");
+            }
         }
 
 

@@ -13,13 +13,19 @@
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" Margin="10">
                             <TextBlock Text="Фильм:" FontWeight="Bold"/>
-                            <TextBlock x:Name="FilmTitleTextBlock" Margin="20 0"/>
+                            <TextBlock Text="{Binding FilmTitle}" x:Name="FilmTitleTextBlock" Margin="20 0"/>
 
                             <TextBlock Text="Сеанс:" FontWeight="Bold"/>
-                            <TextBlock x:Name="SessionTimeTextBlock" Margin="20 0"/>
+                            <TextBlock Text="{Binding SessionTime}" x:Name="SessionTimeTextBlock" Margin="20 0"/>
 
                             <TextBlock Text="Выбранные места:" FontWeight="Bold"/>
-                            <TextBlock x:Name="SelectedSeatsTextBlock" Margin="20 0"/>
+                            <TextBlock Text="{Binding Seats}" x:Name="SelectedSeatsTextBlock" Margin="20 0"/>
+
+                            <TextBlock Text="Цена:"/>
+                            <TextBlock Text="{Binding TotalPrice}" x:Name="TotalPriceTextBlock" Margin="20 0"/>
+
+                            <TextBlock Text="Дата брони:"/>
+                            <TextBlock Text="{Binding BookingDate}" x:Name="DateTextBlock" Margin="20 0"/>
                         </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
