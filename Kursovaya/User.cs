@@ -13,7 +13,7 @@ public class User
     {
         public string FilmTitle { get; set; }
         public string SessionTime { get; set; }
-        public List<string> Seats { get; set; }
+        public string Seats { get; set; }
         public decimal TotalPrice { get; set; }
         public DateTime BookingDate { get; set; }
     }

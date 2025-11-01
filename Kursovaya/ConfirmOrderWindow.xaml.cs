@@ -19,12 +19,12 @@ namespace Kursovaya
             InitializeComponent();
             this.DataContext = this;
         }
-        public ConfirmOrderWindow(string filmTitle, string sessionTime, List<string> selectedSeats,
+        public ConfirmOrderWindow(string filmTitle, string sessionTime, List<string> selectSeats,
             decimal totalPrice, User user) : this()
         {
             FilmTitle = filmTitle;
             SessionTime = sessionTime;
-            SelectedSeats = selectedSeats;
+            SelectedSeats = selectSeats;
             TotalPrice = totalPrice;
             ThisUser = user;
 
@@ -56,7 +56,7 @@ namespace Kursovaya
             {
                 FilmTitle = FilmTitle,
                 SessionTime = SessionTime,
-                Seats = SelectedSeats,
+                Seats = string.Join(", ", SelectedSeats),
                 TotalPrice = TotalPrice,
                 BookingDate = BookingDate
             };

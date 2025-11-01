@@ -23,10 +23,7 @@ namespace Kursovaya
     public partial class PassMovieWindow : Window
     {
         private User _user;
-        public List<User.Booking> Bookings { get; set; }
-        public string FilmTitle { get; set; }
-        public string SessionTime { get; set; }
-        public List<string> SelectedSeats { get; set; } = new List<string>();
+        public List<Booking> Bookings { get; set; }
         public string Seats { get; set; }
 
         private ObservableCollection<Booking> passes;
@@ -45,7 +42,7 @@ namespace Kursovaya
             PassesList.ItemsSource = passes;
             foreach (Booking booking in user.Bookings)
             {
-                Seats = string.Join(",", booking.Seats);
+                Seats = booking.Seats;
                 passes.Add(booking);
             }
 
