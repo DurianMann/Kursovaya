@@ -5,10 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Kursovaya"
         mc:Ignorable="d"
-        Title="PassMovieWindow" Height="450" Width="800">
+        Title="PassMovieWindow" Height="450" Width="800"
+        Style="{DynamicResource WindowStyle}">
     <Grid>
-        <ScrollViewer x:Name="scrollViewer" VerticalScrollBarVisibility="Auto">
-        <ListBox x:Name="PassesList" PreviewMouseWheel="PassesListPreviewMouseWheel">
+        <StackPanel>
+        <Button x:Name="ViewBookingFilmButton" Content="Посмотреть выбранное место" Click="ViewBookingFilmClick" Style="{DynamicResource BaseButtonStyle}" Margin="10" HorizontalAlignment="Left"/>
+
+        <ScrollViewer x:Name="scrollViewer" VerticalScrollBarVisibility="Auto" Margin="10">
+            
+            <ListBox x:Name="PassesList" PreviewMouseWheel="PassesListPreviewMouseWheel" SelectionChanged="ViewBooking_Changed">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                         <StackPanel Orientation="Horizontal" Margin="10">
@@ -31,5 +36,6 @@
             </ListBox.ItemTemplate>
         </ListBox>
         </ScrollViewer>
+        </StackPanel>
     </Grid>
 </Window>

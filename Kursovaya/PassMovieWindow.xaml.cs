@@ -25,6 +25,8 @@ namespace Kursovaya
         private User _user;
         public List<Booking> Bookings { get; set; }
         public string Seats { get; set; }
+        public Booking SelectedBooking { get; set; }
+        public Collection<Film> Films { get; set; }
 
         private ObservableCollection<Booking> passes;
         public PassMovieWindow()
@@ -38,14 +40,34 @@ namespace Kursovaya
             _user = user;
             Bookings = user.Bookings;
             passes = new ObservableCollection<Booking>();
-            
             PassesList.ItemsSource = passes;
+            Films = Film.films;
             foreach (Booking booking in user.Bookings)
             {
                 Seats = booking.Seats;
                 passes.Add(booking);
             }
 
+        }
+
+        private void ViewBooking_Changed(object sender, SelectionChangedEventArgs e)
+        {
+            // Сохраняем выбранный билет
+            SelectedBooking = PassesList.SelectedItem as Booking;
+            Debug.WriteLine(SelectedBooking);
+        }
+        public void ViewBookingFilmClick(object sender, RoutedEventArgs e)
+        {
+            foreach (Film film in Films)
+            {
+                Debug.WriteLine(SelectedBooking.FilmTitle);
+                if (SelectedBooking.FilmTitle == film.Title)
+                {
+                    Debug.WriteLine(SelectedBooking.FilmTitle);
+                    var selectSeatsWindow = new SelectSeatsWindow(film);
+                    selectSeatsWindow.Show();
+                }
+            }
         }
 
         public void PassesListPreviewMouseWheel(object sender, MouseWheelEventArgs e)
