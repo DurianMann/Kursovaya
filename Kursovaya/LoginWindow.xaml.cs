@@ -8,7 +8,7 @@ namespace Kursovaya
 {
     public partial class LoginWindow : Window
     {
-        private Dictionary<string, User> users = Users.users;
+        private Dictionary<string, User> users = User.users;
         private User currentUser;
         
         public LoginWindow()

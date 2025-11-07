@@ -7,7 +7,7 @@ namespace Kursovaya
     public partial class ConfirmOrderWindow : Window
     {
         public string FilmTitle { get; set; }
-        public string SessionTime { get; set; }
+        public TimeOnly SessionTime { get; set; }
         public List<string> SelectedSeats { get; set; }
         public decimal TotalPrice { get; set; }
         public User ThisUser { get; set; }
@@ -19,7 +19,7 @@ namespace Kursovaya
             InitializeComponent();
             this.DataContext = this;
         }
-        public ConfirmOrderWindow(string filmTitle, string sessionTime, List<string> selectSeats,
+        public ConfirmOrderWindow(string filmTitle, TimeOnly sessionTime, List<string> selectSeats,
             decimal totalPrice, User user) : this()
         {
             FilmTitle = filmTitle;
@@ -33,7 +33,7 @@ namespace Kursovaya
         private void UpdateUI()
         {
             FilmTitleTextBlock.Text = FilmTitle;
-            SessionTimeTextBlock.Text = SessionTime;
+            SessionTimeTextBlock.Text = Convert.ToString(SessionTime);
             SelectedSeatsTextBlock.Text = string.Join(", ", SelectedSeats);
             TotalPriceTextBlock.Text = $"{TotalPrice} руб.";
             BalanceTextBlock.Text = $"{ThisUser.Balance - TotalPrice} руб.";
@@ -58,7 +58,8 @@ namespace Kursovaya
                 SessionTime = SessionTime,
                 Seats = string.Join(", ", SelectedSeats),
                 TotalPrice = TotalPrice,
-                BookingDate = BookingDate
+                BookingDate = BookingDate,
+                Username = ThisUser.Username
             };
 
             // Сохраняем в историю пользователя

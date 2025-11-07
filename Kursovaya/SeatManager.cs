@@ -12,13 +12,13 @@ namespace Kursovaya
         private static Dictionary<string, List<string>> _bookedSeats =
             new Dictionary<string, List<string>>();
 
-        public static bool IsSeatAvailable(string filmTitle, string sessionTime, string seat)
+        public static bool IsSeatAvailable(string filmTitle, TimeOnly sessionTime, string seat)
         {
             var key = $"{filmTitle}_{sessionTime}";
             return !_bookedSeats.ContainsKey(key) || !_bookedSeats[key].Contains(seat);
         }
 
-        public static void BookSeat(string filmTitle, string sessionTime, string seat)
+        public static void BookSeat(string filmTitle, TimeOnly sessionTime, string seat)
         {
             var key = $"{filmTitle}_{sessionTime}";
             if (!_bookedSeats.ContainsKey(key))
