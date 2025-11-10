@@ -60,7 +60,7 @@ namespace Kursovaya
                     // Проверяем через глобальный менеджер
                     if (!SeatManager.IsSeatAvailable(SelectedFilm.Title, SelectedFilm.Time, seat))
                     {
-                        button.Background = Brushes.Gray;
+                        button.Background = Brushes.Red;
                         button.IsEnabled = false;
                         button.ToolTip = "Место занято";
                     }
@@ -90,7 +90,7 @@ namespace Kursovaya
                 }
 
                 // Выбор места
-                button.Background = Brushes.Red;
+                button.Background = Brushes.LightBlue;
                 selectedSeats.Add(seat);
                 TotalPrice += SelectedFilm.Price;
             }
