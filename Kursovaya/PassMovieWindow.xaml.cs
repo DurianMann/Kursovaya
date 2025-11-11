@@ -70,12 +70,6 @@ namespace Kursovaya
             }
         }
 
-        public void PassesListPreviewMouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            if (e.Delta > 0)
-                scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - 25);
-            else
-                scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset + 25);
-        }
+       
     }
 }

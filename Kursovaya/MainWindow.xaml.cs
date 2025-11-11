@@ -28,13 +28,7 @@ namespace Kursovaya
             FilmList.ItemsSource = Film.films;
         }
 
-        private void FilmList_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            if (e.Delta > 0)
-                scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - 25);
-            else
-                scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset + 25);
-        }
+        
         private void LogOut_Click(object sender, RoutedEventArgs e)
         {
             currentUser = null;

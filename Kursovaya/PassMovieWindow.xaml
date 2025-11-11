@@ -11,11 +11,13 @@
         <StackPanel>
         <Button x:Name="ViewBookingFilmButton" Content="Посмотреть выбранное место" Click="ViewBookingFilmClick" Style="{DynamicResource BaseButtonStyle}" Margin="10" HorizontalAlignment="Left"/>
 
-        <ScrollViewer x:Name="scrollViewer" VerticalScrollBarVisibility="Auto" Margin="10">
-            
-            <ListBox x:Name="PassesList" PreviewMouseWheel="PassesListPreviewMouseWheel" SelectionChanged="ViewBooking_Changed">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
+
+            <ListBox x:Name="PassesList" SelectionChanged="ViewBooking_Changed" MaxHeight="350">
+                <ListBox.Resources>
+                    <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource CustomScrollBar}"/>
+                </ListBox.Resources>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
                         <StackPanel Orientation="Horizontal" Margin="10">
                             <TextBlock Text="Фильм:" FontWeight="Bold"/>
                             <TextBlock Text="{Binding FilmTitle}" x:Name="FilmTitleTextBlock" Margin="0 0 20 0"/>
@@ -25,17 +27,16 @@
 
                             <TextBlock Text="Выбранные места:" FontWeight="Bold"/>
                             <TextBlock Text="{Binding Seats}" x:Name="SelectedSeatsTextBlock" Margin="0 0 20 0"/>
-                        
+
                             <TextBlock Text="Цена:"/>
                             <TextBlock Text="{Binding TotalPrice}" x:Name="TotalPriceTextBlock" Margin="0 0 20 0"/>
 
                             <TextBlock Text="Дата брони:"/>
                             <TextBlock Text="{Binding BookingDate}" x:Name="DateTextBlock" Margin="0 0 20 0"/>
                         </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        </ScrollViewer>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </StackPanel>
     </Grid>
 </Window>
