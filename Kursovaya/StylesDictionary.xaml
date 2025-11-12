@@ -125,6 +125,38 @@
         </Setter>
     </Style>
 
+    <Style x:Key="VerticalThumbStyle" TargetType="{x:Type Thumb}">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="IsTabStop" Value="False"/>
+        <Setter Property="Width" Value="8"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <Border Background="#4CAF50"
+                    BorderThickness="1"
+                    BorderBrush="#45a049"
+                    CornerRadius="4"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="HorizontalThumbStyle" TargetType="{x:Type Thumb}">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="IsTabStop" Value="False"/>
+        <Setter Property="Height" Value="8"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <Border Background="#4CAF50"
+                    BorderThickness="1"
+                    BorderBrush="#45a049"
+                    CornerRadius="4"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- Стиль для полосы прокрутки -->
     <Style x:Key="CustomScrollBar" TargetType="{x:Type ScrollBar}">
         <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
@@ -135,32 +167,82 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ScrollBar}">
+                    
                     <Grid SnapsToDevicePixels="True">
+                        
                         <Border Background="#f0f0f0" CornerRadius="6"/>
-                        <Track Name="PART_Track" IsDirectionReversed="True">
-                            <!-- Кнопка "вверх" -->
-                            <Track.DecreaseRepeatButton>
-                                <RepeatButton Command="ScrollBar.LineUpCommand"
-                                              Opacity="0"
-                               Width="12"
-                               Height="12"/>
-                            </Track.DecreaseRepeatButton>
-                            <!-- Кнопка "вниз" -->
-                            <Track.IncreaseRepeatButton>
-                                <RepeatButton Command="ScrollBar.LineDownCommand"
-                              Opacity="0"
-                              Width="12"
-                              Height="12"/>
-                            </Track.IncreaseRepeatButton>
-                            <!-- Ползунок -->
-                            <Track.Thumb>
-                                <Thumb Style="{StaticResource CustomThumb}"/>
-                            </Track.Thumb>
-                        </Track>
+                        <Track Name="PART_Track" IsDirectionReversed="True"/>
                     </Grid>
+                    
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <!-- Триггеры на ориентацию -->
+        <Style.Triggers>
+            <!-- Для вертикальной полосы -->
+            <Trigger Property="Orientation" Value="Vertical">
+                <Setter Property="Width" Value="8"/>
+                <Setter Property="Height" Value="Auto"/>
+
+                <Setter Property="Margin" Value="-12 0 3 0"/>
+                <!-- Дополнительные настройки для вертикального ползунка -->
+                <Setter Property="Background" Value="#f0f0f0"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ScrollBar}">
+                            <Grid SnapsToDevicePixels="True">
+                                <Border Background="#f0f0f0" CornerRadius="4"/>
+                                <Track Name="PART_Track" IsDirectionReversed="True">
+                                    <Track.DecreaseRepeatButton>
+                                        <RepeatButton Command="ScrollBar.LineUpCommand"
+                                                  Opacity="0" Width="8" Height="12"/>
+                                    </Track.DecreaseRepeatButton>
+                                    <Track.IncreaseRepeatButton>
+                                        <RepeatButton Command="ScrollBar.LineDownCommand"
+                                                  Opacity="0" Width="8" Height="12"/>
+                                    </Track.IncreaseRepeatButton>
+                                    <Track.Thumb>
+                                        <Thumb Style="{StaticResource VerticalThumbStyle}"/>
+                                    </Track.Thumb>
+                                </Track>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+
+            <!-- Для горизонтальной полосы -->
+            <Trigger Property="Orientation" Value="Horizontal">
+                <Setter Property="Width" Value="Auto"/>
+                <Setter Property="Height" Value="8"/>
+
+                <Setter Property="Margin" Value="0 3 -12 0"/>
+                <!-- Дополнительные настройки для горизонтального ползунка -->
+                <Setter Property="Background" Value="#f0f0f0"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ScrollBar}">
+                            <Grid SnapsToDevicePixels="True">
+                                <Border Background="#f0f0f0" CornerRadius="4"/>
+                                <Track Name="PART_Track" IsDirectionReversed="False">
+                                    <Track.DecreaseRepeatButton>
+                                        <RepeatButton Command="ScrollBar.LineLeftCommand"
+                                                  Opacity="0" Width="12" Height="8"/>
+                                    </Track.DecreaseRepeatButton>
+                                    <Track.IncreaseRepeatButton>
+                                        <RepeatButton Command="ScrollBar.LineRightCommand"
+                                                  Opacity="0" Width="12" Height="8"/>
+                                    </Track.IncreaseRepeatButton>
+                                    <Track.Thumb>
+                                        <Thumb Style="{StaticResource HorizontalThumbStyle}"/>
+                                    </Track.Thumb>
+                                </Track>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
     </Style>
     
 </ResourceDictionary>

@@ -14,45 +14,44 @@
             <RowDefinition Height="Auto"/>
             <!-- Кнопка "Выбрать места" -->
         </Grid.RowDefinitions>
-        
+
         <Grid Grid.Row="0" Margin="5">
-                
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-                
+
             <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="0,0,20,0">
-                    <TextBlock Text="Логин:" Margin="5" Style="{DynamicResource LoginStyle}" HorizontalAlignment="Left"/>
-                    <TextBlock x:Name="LoginLabel" Margin="5" Style="{DynamicResource LoginStyle}" HorizontalAlignment="Left"/>
-                </StackPanel>
-                
-                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-                    <TextBlock Text="Баланс:" Style="{DynamicResource LoginStyle}" Margin="0,0,5,0"/>
-                    <Label x:Name="BalanceLabel" FontSize="28" Margin="0,10,0,10"/>
-                    <Button Content="+" Click="TopUp_Click" Style="{DynamicResource BaseButtonStyle}" 
+                <TextBlock Text="Логин:" Margin="5" Style="{DynamicResource LoginStyle}" HorizontalAlignment="Left"/>
+                <TextBlock x:Name="LoginLabel" Margin="5" Style="{DynamicResource LoginStyle}" HorizontalAlignment="Left"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                <TextBlock Text="Баланс:" Style="{DynamicResource LoginStyle}" Margin="0,0,5,0"/>
+                <Label x:Name="BalanceLabel" FontSize="28" Margin="0,10,0,10"/>
+                <Button Content="+" Click="TopUp_Click" Style="{DynamicResource BaseButtonStyle}" 
                     Width="20" Height="20" Padding="0" VerticalContentAlignment="Top" Margin="10,0,0,0"/>
-                </StackPanel>
-                
-                <Button Grid.Column="2" Height="30" Padding="2" VerticalAlignment="Center" Content="Выйти из профиля" Click="LogOut_Click" 
+            </StackPanel>
+
+            <Button Grid.Column="2" Height="30" Padding="2" VerticalAlignment="Center" Content="Выйти из профиля" Click="LogOut_Click" 
                 Style="{DynamicResource BaseButtonStyle}"/>
-                    
-                
-                    
+
+
+
         </Grid>
-
-
-
-        <StackPanel Grid.Row="1" Height="auto" Width="auto" VerticalAlignment="Stretch">
-            <Button Click="CheckSeats_Click" Style="{DynamicResource BaseButtonStyle}" Content="Билеты" HorizontalAlignment="Right"/>
+        <StackPanel Grid.Row="1" Height="auto" Width="auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Button Click="CheckSeats_Click" Style="{DynamicResource BaseButtonStyle}" Content="Билеты" HorizontalAlignment="Right" Margin="10"/>
             <TextBlock Text="Выберите фильм" FontSize="20" Style="{DynamicResource TextBlockStyle}" />
             <ListBox x:Name="FilmList"
          SelectionChanged="FilmList_SelectionChanged"
          Margin="10"
          VerticalAlignment="Stretch"
+         HorizontalAlignment="Stretch"
          HorizontalContentAlignment="Stretch"
-         MaxHeight="800">
+         MaxHeight="760"
+                     MouseDoubleClick="FilmList_MouseDoubleClick">
                 <ListBox.Resources>
                     <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource CustomScrollBar}"/>
                 </ListBox.Resources>

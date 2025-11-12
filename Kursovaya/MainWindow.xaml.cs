@@ -28,13 +28,16 @@ namespace Kursovaya
             FilmList.ItemsSource = Film.films;
         }
 
-        
+
         private void LogOut_Click(object sender, RoutedEventArgs e)
         {
             currentUser = null;
             LoginWindow loginWindow = new LoginWindow();
             loginWindow.Show();
-            Close();
+            if (loginWindow.IsVisible)
+            {
+                Close();
+            }
         }
         private void TopUp_Click(object sender, RoutedEventArgs e)
         {
@@ -77,6 +80,20 @@ namespace Kursovaya
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+        private void FilmList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var selectedItem = FilmList.SelectedItem as Film;
+            if (selectedItem != null)
+            {
+                ShowFilmDescription(selectedItem);
+            }
+        }
+        private void ShowFilmDescription(Film film)
+        {
+            // Пример: создаём и показываем окно с описанием
+            var descriptionWindow = new FilmDescriptionWindow(film);
+            descriptionWindow.ShowDialog(); // или Show(), если не нужен модальный диалог
         }
     }
 }
