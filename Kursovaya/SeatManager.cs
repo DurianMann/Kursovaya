@@ -8,22 +8,35 @@ namespace Kursovaya
 {
     public static class SeatManager
     {
-        // Ключ: FilmTitle + SessionTime, значение: список занятых мест
-        private static Dictionary<string, List<string>> _bookedSeats =
-            new Dictionary<string, List<string>>();
+        // Ключ: FilmTitle + SessionTime
+        // Значение: список занятых мест (каждый элемент — пара (ряд, место))
+        private static Dictionary<string, List<(int Row, int Seat)>> _bookedSeats =
+            new Dictionary<string, List<(int Row, int Seat)>>();
 
-        public static bool IsSeatAvailable(string filmTitle, TimeOnly sessionTime, string seat)
+
+        public static bool IsSeatAvailable(string filmTitle, TimeOnly sessionTime, int row, int seat)
         {
             var key = $"{filmTitle}_{sessionTime}";
-            return !_bookedSeats.ContainsKey(key) || !_bookedSeats[key].Contains(seat);
+
+            // Если ключа нет — место свободно
+            if (!_bookedSeats.ContainsKey(key))
+                return true;
+
+            // Проверяем, занято ли конкретное место (ряд + номер)
+            return !_bookedSeats[key].Contains((row, seat));
         }
 
-        public static void BookSeat(string filmTitle, TimeOnly sessionTime, string seat)
+        public static void BookSeat(string filmTitle, TimeOnly sessionTime, int row, int seat)
         {
             var key = $"{filmTitle}_{sessionTime}";
+
+            // Создаём список для сеанса, если его ещё нет
             if (!_bookedSeats.ContainsKey(key))
-                _bookedSeats[key] = new List<string>();
-            _bookedSeats[key].Add(seat);
+                _bookedSeats[key] = new List<(int Row, int Seat)>();
+
+
+            // Добавляем занятое место (ряд + номер)
+            _bookedSeats[key].Add((row, seat));
         }
     }
 

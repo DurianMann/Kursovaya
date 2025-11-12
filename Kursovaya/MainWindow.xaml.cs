@@ -6,6 +6,7 @@ using static Kursovaya.MainWindow;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Diagnostics;
+using System.ComponentModel;
 
 namespace Kursovaya
 {
@@ -41,7 +42,9 @@ namespace Kursovaya
         }
         private void TopUp_Click(object sender, RoutedEventArgs e)
         {
-            new TopUpWindow(currentUser).Show();
+            var topUpWindow = new TopUpWindow(currentUser);
+            topUpWindow.Owner = this;
+            topUpWindow.ShowDialog();
         }
         public void UpdateBalanceLabel()
         {
@@ -51,7 +54,6 @@ namespace Kursovaya
         {
             // Сохраняем выбранный фильм
             SelectedFilm = FilmList.SelectedItem as Film;
-            Debug.WriteLine(SelectedFilm);
         }
         
         private void SelectSeats_Click(object sender, RoutedEventArgs e)
@@ -67,19 +69,28 @@ namespace Kursovaya
                 {
                     SelectedFilm = SelectedFilm
                 };
-                selectSeatsWindow.Show();
+                selectSeatsWindow.Owner = this;
+                selectSeatsWindow.ShowDialog();
             }
         }
         private void CheckSeats_Click(object sender, RoutedEventArgs e)
         {
             // Передаем забронированные места
             var passMovieWindow = new PassMovieWindow(currentUser);
-                passMovieWindow.Show();
+                passMovieWindow.Owner = this;
+                passMovieWindow.ShowDialog();
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Window_Closing(object sender, CancelEventArgs e)
         {
-            Application.Current.Shutdown();
+            // Закрываем все дочерние окна
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window != this && window.Owner == this)
+                {
+                    window.Close();
+                }
+            }
         }
         private void FilmList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -93,6 +104,7 @@ namespace Kursovaya
         {
             // Пример: создаём и показываем окно с описанием
             var descriptionWindow = new FilmDescriptionWindow(film);
+            descriptionWindow.Owner = this;
             descriptionWindow.ShowDialog(); // или Show(), если не нужен модальный диалог
         }
     }

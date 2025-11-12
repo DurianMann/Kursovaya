@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Kursovaya"
         mc:Ignorable="d"
         Title="PassMovieWindow" Height="450" Width="800"
-        Style="{DynamicResource WindowStyle}">
+        Style="{DynamicResource WindowStyle}"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <StackPanel>
         <Button x:Name="ViewBookingFilmButton" Content="Посмотреть выбранное место" Click="ViewBookingFilmClick" Style="{DynamicResource BaseButtonStyle}" Margin="10" HorizontalAlignment="Left"/>
@@ -18,21 +19,31 @@
                 </ListBox.Resources>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Margin="10">
-                            <TextBlock Text="Фильм:" FontWeight="Bold"/>
-                            <TextBlock Text="{Binding FilmTitle}" x:Name="FilmTitleTextBlock" Margin="0 0 20 0"/>
+                        <StackPanel Orientation="Vertical" Margin="10" >
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock Text="Фильм:" FontWeight="Bold"/>
+                                <TextBlock Text="{Binding FilmTitle}" x:Name="FilmTitleTextBlock" Margin="0 0 20 0"/>
+                            </StackPanel>
 
-                            <TextBlock Text="Сеанс:" FontWeight="Bold"/>
-                            <TextBlock Text="{Binding SessionTime}" x:Name="SessionTimeTextBlock" Margin="0 0 20 0"/>
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock Text="Сеанс:" FontWeight="Bold"/>
+                                <TextBlock Text="{Binding SessionTime}" x:Name="SessionTimeTextBlock" Margin="0 0 20 0"/>
+                            </StackPanel>
 
-                            <TextBlock Text="Выбранные места:" FontWeight="Bold"/>
-                            <TextBlock Text="{Binding Seats}" x:Name="SelectedSeatsTextBlock" Margin="0 0 20 0"/>
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock Text="Выбранные места:" FontWeight="Bold"/>
+                                <TextBlock Text="{Binding Seats}" x:Name="SelectedSeatsTextBlock" Margin="0 0 20 0"/>
+                            </StackPanel>
 
-                            <TextBlock Text="Цена:"/>
-                            <TextBlock Text="{Binding TotalPrice}" x:Name="TotalPriceTextBlock" Margin="0 0 20 0"/>
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock Text="Цена:"/>
+                                <TextBlock Text="{Binding TotalPrice}" x:Name="TotalPriceTextBlock" Margin="0 0 20 0"/>
+                            </StackPanel>
 
-                            <TextBlock Text="Дата брони:"/>
-                            <TextBlock Text="{Binding BookingDate}" x:Name="DateTextBlock" Margin="0 0 20 0"/>
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock Text="Дата брони:"/>
+                                <TextBlock Text="{Binding BookingDate}" x:Name="DateTextBlock" Margin="0 0 20 0"/>
+                            </StackPanel>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

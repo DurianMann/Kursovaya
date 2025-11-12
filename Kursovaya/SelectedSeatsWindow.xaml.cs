@@ -2,11 +2,12 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 namespace Kursovaya
 {
     public partial class SelectSeatsWindow : Window
     {
-        private List<string> selectedSeats = new List<string>();
+        private List<int> selectedSeats = new List<int>();
         public Film SelectedFilm { get; set; }
         public decimal TotalPrice { get; set; }// Добавляем свойство для фильма
 
@@ -26,39 +27,47 @@ namespace Kursovaya
         }
         private void CreateSeatsGrid()
         {
-            // Пример создания 10 мест
-            for (int i = 1; i <= 80; i++)
+            for (int j = 1; j <= 8; j++)
             {
-                Button seatButton = new Button
+                Label label = new Label 
                 {
-                    Content = $"М{i}",
+                    Content = $"{j}",
                     Width = 30,
                     Height = 30,
                     Margin = new Thickness(2),
                     Background = Brushes.White
                 };
+                SeatsGrid.Children.Add(label);
 
-                seatButton.Click += Seat_Click;
-                SeatsGrid.Children.Add(seatButton);
+                for (int i = 1; i <= 10; i++)
+                {
+                    Button seatButton = new Button
+                    {
+                        Content = $"М{i}",
+                        Width = 30,
+                        Height = 30,
+                        Margin = new Thickness(2),
+                        Background = Brushes.White
+                    };
+                    seatButton.Click += Seat_Click;
+                    SeatsGrid.Children.Add(seatButton);
+                }
             }
         }
-
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             MarkBookedSeats(); // Перепроверяем статусы при загрузке
         }
-
-        
-
         private void MarkBookedSeats()
         {
             foreach (var child in SeatsGrid.Children)
             {
                 if (child is Button button)
                 {
-                    string seat = button.Content.ToString();
+                    int seat = Convert.ToInt32(button.Content);
+                    int row = 0;
                     // Проверяем через глобальный менеджер
-                    if (!SeatManager.IsSeatAvailable(SelectedFilm.Title, SelectedFilm.Time, seat))
+                    if (!SeatManager.IsSeatAvailable(SelectedFilm.Title, SelectedFilm.Time, row, seat))
                     {
                         button.Background = Brushes.Red;
                         button.IsEnabled = false;
@@ -71,7 +80,9 @@ namespace Kursovaya
         private void Seat_Click(object sender, RoutedEventArgs e)
         {
             var button = (Button)sender;
-            string seat = button.Content.ToString();
+            var grid = (UniformGrid)Parent;
+            int seat = Convert.ToInt32(button.Content);
+            int row = 0;
 
             if (selectedSeats.Contains(seat))
             {
@@ -83,7 +94,7 @@ namespace Kursovaya
             else
             {
                 // Проверка через глобальный менеджер
-                if (!SeatManager.IsSeatAvailable(SelectedFilm.Title, SelectedFilm.Time, seat))
+                if (!SeatManager.IsSeatAvailable(SelectedFilm.Title, SelectedFilm.Time, row, seat))
                 {
                     MessageBox.Show($"Место {seat} уже забронировано!");
                     return;
@@ -114,7 +125,6 @@ namespace Kursovaya
                 selectedSeats,
                 TotalPrice,
                 MainWindow.currentUser
-                
             );
 
             confirmWindow.ShowDialog();

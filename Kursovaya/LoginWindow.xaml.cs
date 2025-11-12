@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
 using Kursovaya;
 
 namespace Kursovaya
@@ -24,13 +25,13 @@ namespace Kursovaya
 
             if (!users.TryGetValue(enteredUsername, out User user))
             {
-                MessageBox.Show("Пользователь не найден!");
+                MessageBox.Show($"Пользователь не найден!\nПроверьте правильность данных аккаунта и повторите попытку","Пользователь не найден",MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
             if (user.Password != enteredPassword)
             {
-                MessageBox.Show("Неверный пароль!");
+                MessageBox.Show("Неверный пароль!","error",MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -43,7 +44,7 @@ namespace Kursovaya
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка: {ex.Message}");
+                MessageBox.Show($"Ошибка: {ex.Message} ");
             }
         }
         private void Register_Click(object sender, RoutedEventArgs e)

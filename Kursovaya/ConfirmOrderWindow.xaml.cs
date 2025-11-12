@@ -8,7 +8,7 @@ namespace Kursovaya
     {
         public string FilmTitle { get; set; }
         public TimeOnly SessionTime { get; set; }
-        public List<string> SelectedSeats { get; set; }
+        public List<int> SelectedSeats { get; set; }
         public decimal TotalPrice { get; set; }
         public User ThisUser { get; set; }
         public DateTime BookingDate { get; set; } = DateTime.Now;
@@ -19,7 +19,7 @@ namespace Kursovaya
             InitializeComponent();
             this.DataContext = this;
         }
-        public ConfirmOrderWindow(string filmTitle, TimeOnly sessionTime, List<string> selectSeats,
+        public ConfirmOrderWindow(string filmTitle, TimeOnly sessionTime, List<int> selectSeats,
             decimal totalPrice, User user) : this()
         {
             FilmTitle = filmTitle;
@@ -46,10 +46,12 @@ namespace Kursovaya
                 MessageBox.Show("Недостаточно средств на балансе!");
                 return;
             }
-
-            foreach (var seat in SelectedSeats)
+            foreach (int row in SelectedSeats)
             {
-                SeatManager.BookSeat(FilmTitle, SessionTime, seat);
+                foreach (int seat in SelectedSeats)
+                {
+                    SeatManager.BookSeat(FilmTitle, SessionTime, row, seat);
+                }
             }
             // Создаем запись о бронировании
             User.Booking booking = new User.Booking

@@ -35,14 +35,10 @@
                     Width="20" Height="20" Padding="0" VerticalContentAlignment="Top" Margin="10,0,0,0"/>
             </StackPanel>
 
-            <Button Grid.Column="2" Height="30" Padding="2" VerticalAlignment="Center" Content="Выйти из профиля" Click="LogOut_Click" 
-                Style="{DynamicResource BaseButtonStyle}"/>
-
-
-
+            <Button Grid.Column="2" Height="30" Padding="2" VerticalAlignment="Center" Content="Выйти из профиля" Click="LogOut_Click" Style="{DynamicResource BaseButtonStyle}"/>
         </Grid>
         <StackPanel Grid.Row="1" Height="auto" Width="auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <Button Click="CheckSeats_Click" Style="{DynamicResource BaseButtonStyle}" Content="Билеты" HorizontalAlignment="Right" Margin="10"/>
+            <Button Click="CheckSeats_Click" Style="{DynamicResource BaseButtonStyle}" Content="Билеты" HorizontalAlignment="Right" Margin="10" Height="30" Padding="2"/>
             <TextBlock Text="Выберите фильм" FontSize="20" Style="{DynamicResource TextBlockStyle}" />
             <ListBox x:Name="FilmList"
          SelectionChanged="FilmList_SelectionChanged"

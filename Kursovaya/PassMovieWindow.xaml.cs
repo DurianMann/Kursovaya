@@ -22,7 +22,6 @@ namespace Kursovaya
     /// </summary>
     public partial class PassMovieWindow : Window
     {
-        private User _user;
         public List<Booking> Bookings { get; set; }
         public string Seats { get; set; }
         public Booking SelectedBooking { get; set; }
@@ -37,7 +36,6 @@ namespace Kursovaya
 
         public PassMovieWindow(User user) : this()
         {
-            _user = user;
             Bookings = user.Bookings;
             passes = new ObservableCollection<Booking>();
             PassesList.ItemsSource = passes;
@@ -58,16 +56,20 @@ namespace Kursovaya
         }
         public void ViewBookingFilmClick(object sender, RoutedEventArgs e)
         {
-            foreach (Film film in Films)
+            try
             {
-                Debug.WriteLine(SelectedBooking.FilmTitle);
-                if (SelectedBooking.FilmTitle == film.Title)
+                foreach (Film film in Films)
                 {
-                    Debug.WriteLine(SelectedBooking.FilmTitle);
-                    var selectSeatsWindow = new SelectSeatsWindow(film);
-                    selectSeatsWindow.Show();
+                    if (SelectedBooking.FilmTitle == film.Title)
+                    {
+                        Debug.WriteLine(SelectedBooking.FilmTitle);
+                        var selectSeatsWindow = new SelectSeatsWindow(film);
+                        selectSeatsWindow.Show();
+                    }
                 }
             }
+            catch (NullReferenceException ex) { MessageBox.Show(ex.Message + "\nВыберите билет и перейдите по купленным местам" + "\nЕсли билета нет, то удостоверьтесь в правильности платежа и попробуйте снова"); }
+
         }
 
        
