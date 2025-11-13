@@ -7,11 +7,22 @@ namespace Kursovaya
 {
     public partial class SelectSeatsWindow : Window
     {
-        private List<int> selectedSeats = new List<int>();
+        private List<string> selectedSeats = new List<string>();
         public Film SelectedFilm { get; set; }
+        public TimeOnly SelectedTime { get; set; }
+        
         public decimal TotalPrice { get; set; }// Добавляем свойство для фильма
 
         public SelectSeatsWindow(Film film)
+        {
+            InitializeComponent();
+            this.DataContext = this;
+            SelectedFilm = film;
+
+            CreateSeatsGrid();
+            MarkBookedSeats();
+        }
+        public SelectSeatsWindow(Film film,TimeOnly selectedTime)
         {
             InitializeComponent();
             this.DataContext = this;
@@ -43,7 +54,7 @@ namespace Kursovaya
                 {
                     Button seatButton = new Button
                     {
-                        Content = $"М{i}",
+                        Content = $"{j}.{i}",
                         Width = 30,
                         Height = 30,
                         Margin = new Thickness(2),
@@ -53,6 +64,11 @@ namespace Kursovaya
                     SeatsGrid.Children.Add(seatButton);
                 }
             }
+        }
+        private void ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SelectedTime = (TimeOnly)comboBox1.SelectedItem;
+            MarkBookedSeats();
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -64,26 +80,21 @@ namespace Kursovaya
             {
                 if (child is Button button)
                 {
-                    int seat = Convert.ToInt32(button.Content);
-                    int row = 0;
+                    string seat = button.Content.ToString();
                     // Проверяем через глобальный менеджер
-                    if (!SeatManager.IsSeatAvailable(SelectedFilm.Title, SelectedFilm.Time, row, seat))
+                    if (!SeatManager.IsSeatAvailable(SelectedFilm.Title, SelectedTime, seat))
                     {
-                        button.Background = Brushes.Red;
                         button.IsEnabled = false;
                         button.ToolTip = "Место занято";
                     }
                 }
             }
         }
-
         private void Seat_Click(object sender, RoutedEventArgs e)
         {
             var button = (Button)sender;
             var grid = (UniformGrid)Parent;
-            int seat = Convert.ToInt32(button.Content);
-            int row = 0;
-
+            string seat = button.Content.ToString();
             if (selectedSeats.Contains(seat))
             {
                 // Снятие выбора
@@ -94,23 +105,18 @@ namespace Kursovaya
             else
             {
                 // Проверка через глобальный менеджер
-                if (!SeatManager.IsSeatAvailable(SelectedFilm.Title, SelectedFilm.Time, row, seat))
+                if (!SeatManager.IsSeatAvailable(SelectedFilm.Title, SelectedTime, seat))
                 {
                     MessageBox.Show($"Место {seat} уже забронировано!");
                     return;
                 }
-
                 // Выбор места
                 button.Background = Brushes.LightBlue;
                 selectedSeats.Add(seat);
                 TotalPrice += SelectedFilm.Price;
             }
-
             UpdatePriceLabel();
         }
-
-
-
         private void ConfirmOrder_Click(object sender, RoutedEventArgs e)
         {
             if (selectedSeats.Count == 0)
@@ -118,24 +124,32 @@ namespace Kursovaya
                 MessageBox.Show("Выберите места для бронирования!");
                 return;
             }
-
+            if (SelectedTime == TimeOnly.Parse("00:00:00"))
+            {
+                MessageBox.Show("Выберите сеанс для бронирования!");
+                return;
+            }
+            foreach (var seat in selectedSeats)
+            {
+                if (!SeatManager.IsSeatAvailable(SelectedFilm.Title, SelectedTime, seat))
+                {
+                    MessageBox.Show($"Некоторые места уже забронированы!");
+                    return;
+                }
+            }
             var confirmWindow = new ConfirmOrderWindow(
                 SelectedFilm.Title,
-                SelectedFilm.Time,
+                SelectedTime,
                 selectedSeats,
                 TotalPrice,
                 MainWindow.currentUser
             );
-
             confirmWindow.ShowDialog();
-
             selectedSeats.Clear();
             TotalPrice = 0;
             UpdatePriceLabel();
             MarkBookedSeats();
             Close();// Обновляем отображение мест
         }
-
-        
     }
 }

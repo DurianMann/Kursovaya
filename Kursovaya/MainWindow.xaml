@@ -56,7 +56,7 @@
                         <StackPanel Orientation="Horizontal" Margin="5">
                             <Image Source="{Binding MoviePreview}" MaxHeight="200" Stretch="Uniform"/>
                             <TextBlock Text="{Binding Title}" Style="{DynamicResource BigCaseStyle}"/>
-                            <TextBlock Text="{Binding Time}" Style="{DynamicResource TextBlockStyle}"/>
+                            <TextBlock Text="{Binding TimePreview}" Style="{DynamicResource TextBlockStyle}"/>
                             <TextBlock Text="Цена:" Margin="10 10 0 10" Style="{DynamicResource TextBlockStyle}"/>
                             <TextBlock Text="{Binding Price}" Margin="0 10 0 10" Style="{DynamicResource TextBlockStyle}"/>
                             <TextBlock Text="р." Margin="0 10 10 10" Style="{DynamicResource TextBlockStyle}"/>
