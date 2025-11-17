@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows;
 using System.Windows.Controls.Primitives;
+using System.Diagnostics;
 namespace Kursovaya
 {
     public partial class SelectSeatsWindow : Window
@@ -46,7 +47,6 @@ namespace Kursovaya
                     Width = 30,
                     Height = 30,
                     Margin = new Thickness(2),
-                    Background = Brushes.White
                 };
                 SeatsGrid.Children.Add(label);
 
@@ -58,7 +58,8 @@ namespace Kursovaya
                         Width = 30,
                         Height = 30,
                         Margin = new Thickness(2),
-                        Background = Brushes.White
+                        Padding = new Thickness(0),
+                        Style = (Style)Application.Current.Resources["BaseButtonStyle"]
                     };
                     seatButton.Click += Seat_Click;
                     SeatsGrid.Children.Add(seatButton);
@@ -68,7 +69,8 @@ namespace Kursovaya
         private void ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             SelectedTime = (TimeOnly)comboBox1.SelectedItem;
-            MarkBookedSeats();
+            Debug.WriteLine("Время сеанса изменена");
+            MarkBookedSeats(); // Перепроверяем статусы
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -87,6 +89,10 @@ namespace Kursovaya
                         button.IsEnabled = false;
                         button.ToolTip = "Место занято";
                     }
+                    else
+                    {
+                        button.IsEnabled = true;
+                    }
                 }
             }
         }
@@ -98,9 +104,9 @@ namespace Kursovaya
             if (selectedSeats.Contains(seat))
             {
                 // Снятие выбора
-                button.Background = Brushes.White;
                 selectedSeats.Remove(seat);
                 TotalPrice -= SelectedFilm.Price;
+                button.Background = (SolidColorBrush)Application.Current.FindResource("PrimaryColor");
             }
             else
             {
@@ -111,9 +117,9 @@ namespace Kursovaya
                     return;
                 }
                 // Выбор места
-                button.Background = Brushes.LightBlue;
                 selectedSeats.Add(seat);
                 TotalPrice += SelectedFilm.Price;
+                button.Background = (SolidColorBrush)Application.Current.FindResource("DisabledBrush");
             }
             UpdatePriceLabel();
         }
@@ -134,7 +140,7 @@ namespace Kursovaya
                 if (!SeatManager.IsSeatAvailable(SelectedFilm.Title, SelectedTime, seat))
                 {
                     MessageBox.Show($"Некоторые места уже забронированы!");
-                    return;
+                    Close(); return;
                 }
             }
             var confirmWindow = new ConfirmOrderWindow(

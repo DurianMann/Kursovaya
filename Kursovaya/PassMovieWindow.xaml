@@ -5,15 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Kursovaya"
         mc:Ignorable="d"
-        Title="PassMovieWindow" Height="450" Width="800"
+        Title="PassMovieWindow" Height="480" Width="800"
         Style="{DynamicResource WindowStyle}"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <StackPanel>
-        <Button x:Name="ViewBookingFilmButton" Content="Посмотреть выбранное место" Click="ViewBookingFilmClick" Style="{DynamicResource BaseButtonStyle}" Margin="10" HorizontalAlignment="Left"/>
-
-
-            <ListBox x:Name="PassesList" SelectionChanged="ViewBooking_Changed" MaxHeight="350">
+            <Button x:Name="ViewBookingFilmButton" Content="Посмотреть выбранное место" Click="ViewBookingFilmClick" Style="{DynamicResource BaseButtonStyle}" Margin="10" HorizontalAlignment="Left"/>
+            <ListBox x:Name="PassesList" SelectionChanged="ViewBooking_Changed" MaxHeight="350" Style="{DynamicResource ListBoxStyle}" Margin="10">
                 <ListBox.Resources>
                     <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource CustomScrollBar}"/>
                 </ListBox.Resources>

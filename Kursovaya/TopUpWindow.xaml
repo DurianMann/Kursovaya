@@ -6,10 +6,10 @@
         WindowStartupLocation="CenterScreen">
     <Grid Margin="20">
         <StackPanel>
-            <TextBlock Text="Текущий баланс:" Margin="0 5 0 0" Style="{DynamicResource LoginStyle}"/>
-            <TextBlock x:Name="lblCurrentBalance" Margin="0 0 0 5" Style="{DynamicResource LoginStyle}"/>
+            <TextBlock Text="Текущий баланс:" Margin="0 5 0 0" />
+            <TextBlock x:Name="lblCurrentBalance" Margin="0 0 0 5" />
 
-            <TextBlock Text="Сумма пополнения:" Margin="0 5 0 0" Style="{DynamicResource LoginStyle}"/>
+            <TextBlock Text="Сумма пополнения:" Margin="0 5 0 0" />
             <TextBox x:Name="txtAmount" Margin="0 0 0 5" Style="{DynamicResource BaseTextBoxStyle}"/>
 
             <Button Content="Пополнить" Click="TopUp_Click" Margin="0 20" Style="{DynamicResource BaseButtonStyle}"/>

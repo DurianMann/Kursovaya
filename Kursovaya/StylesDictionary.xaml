@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!-- Основные цвета интерфейса -->
     <SolidColorBrush x:Key="PrimaryColor" Color="#2196F3"/>
@@ -11,7 +12,7 @@
     <SolidColorBrush x:Key="ForegroundBrush" Color="#333333"/>
     <!-- Темно-серый текст -->
     <SolidColorBrush x:Key="DisabledBrush" Color="#CCCCCC"/>
-    <!-- Серый для отключенных элементов -->
+    <!-- Серый для отключенных -->
     <SolidColorBrush x:Key="ErrorBrush" Color="#FF0000"/>
     <!-- Красный для ошибок -->
 
@@ -22,13 +23,40 @@
     <!-- Голубой для выбранного -->
     <SolidColorBrush x:Key="PressedColor" Color="#BBBBBB"/>
     <!-- Серый при нажатии -->
+    <SolidColorBrush x:Key="ListItemHover" Color="#F5F5F5"/>
+    <!-- Светлый серый для ховера в списке -->
+    <SolidColorBrush x:Key="ListItemSelected" Color="#E3F2FD"/>
+    <!-- Очень светлый голубой для выбранного в списке -->
 
-    <!-- Стили для кнопок -->
+    <!-- Общие отступы и радиусы -->
+    <Thickness x:Key="DefaultPadding">10</Thickness>
+    <sys:Double x:Key="DefaultMarginValue">10</sys:Double>
+    <Thickness x:Key="DefaultMargin"
+           Left="0"
+           Top="{StaticResource DefaultMarginValue}"
+           Right="0"
+           Bottom="{StaticResource DefaultMarginValue}"/>
+    <CornerRadius x:Key="CornerRadius">4</CornerRadius>
+
+    <!-- Стиль базовых кнопок -->
     <Style x:Key="BaseButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="{StaticResource PrimaryColor}"/>
         <Setter Property="Foreground" Value="White"/>
-        <Setter Property="Padding" Value="10"/>
-        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Padding" Value="{StaticResource DefaultPadding}"/>
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                            CornerRadius="{StaticResource CornerRadius}"
+                            Padding="{TemplateBinding Padding}"
+                            Margin="{TemplateBinding Margin}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource HoverColor}"/>
@@ -36,14 +64,18 @@
             <Trigger Property="IsPressed" Value="True">
                 <Setter Property="Background" Value="{StaticResource PressedColor}"/>
             </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="{StaticResource DisabledBrush}"/>
+                <Setter Property="Foreground" Value="White"/>
+            </Trigger>
         </Style.Triggers>
     </Style>
 
-    <!-- Стиль для текстовых блоков -->
-    <Style x:Key="LoginStyle" TargetType="TextBlock">
+    <!-- Стиль для текстовых блоков (общий) -->
+    <Style x:Key="TextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
         <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
-        <Setter Property="Padding" Value="4"/>
-        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Padding" Value="{StaticResource DefaultPadding}"/>
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}"/>
         <Setter Property="FontFamily" Value="Segoe UI"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="TextWrapping" Value="Wrap"/>
@@ -55,76 +87,63 @@
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="TextBlockStyle" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
-        <Setter Property="Padding" Value="10"/>
-        <Setter Property="Margin" Value="0 10 0 10"/>
-        <Setter Property="FontFamily" Value="Segoe UI"/>
-        <Setter Property="FontSize" Value="14"/>
-        <Setter Property="TextWrapping" Value="Wrap"/>
-        <Setter Property="TextAlignment" Value="Left"/>
-        <Style.Triggers>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{StaticResource DisabledBrush}"/>
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-    
-    <Style x:Key="BigCaseStyle" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
-        <Setter Property="Padding" Value="10"/>
-        <Setter Property="Margin" Value="0 10 0 10"/>
-        <Setter Property="FontFamily" Value="Segoe UI"/>
+    <!-- Заголовки (крупный текст) -->
+    <Style x:Key="BigCaseStyle" TargetType="TextBlock" BasedOn="{StaticResource TextBlockStyle}">
         <Setter Property="FontSize" Value="28"/>
-        <Setter Property="TextWrapping" Value="Wrap"/>
         <Setter Property="TextAlignment" Value="Center"/>
-        <Style.Triggers>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{StaticResource DisabledBrush}"/>
-            </Trigger>
-        </Style.Triggers>
+        <Setter Property="Margin" Value="0 15 0 15"/>
     </Style>
 
-
-    <!-- Стили для текстовых полей -->
+    <!-- Стиль для полей ввода -->
     <Style x:Key="BaseTextBoxStyle" TargetType="TextBox">
         <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
         <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
         <Setter Property="BorderBrush" Value="{StaticResource PrimaryColor}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Padding" Value="5"/>
-    </Style>
-
-    <Style x:Key="BasePasswordBoxStyle" TargetType="PasswordBox">
-        <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
-        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource PrimaryColor}"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Padding" Value="5"/>
-    </Style>
-
-    <!-- Стили для окон -->
-    <Style x:Key="WindowStyle" TargetType="Window">
-        <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
-        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
-    </Style>
-
-    <!-- Стиль для ползунка (Thumb) -->
-    <Style x:Key="CustomThumb" TargetType="{x:Type Thumb}">
-        <Setter Property="OverridesDefaultStyle" Value="True"/>
-        <Setter Property="IsTabStop" Value="False"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border Background="#4CAF50"
-                            BorderThickness="1"
-                            BorderBrush="#45a049"
-                            CornerRadius="4"/>
+                <ControlTemplate TargetType="TextBox">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{StaticResource CornerRadius}"
+                            Padding="{TemplateBinding Padding}">
+                        <ScrollViewer x:Name="PART_ContentHost" Focusable="false"/>
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
+    <Style x:Key="PasswordBoxStyle" TargetType="PasswordBox">
+        <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource PrimaryColor}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="PasswordBox">
+                    <Border Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{StaticResource CornerRadius}"
+                    Padding="{TemplateBinding Padding}">
+                        <ScrollViewer x:Name="PART_ContentHost" Focusable="false"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+        <!-- Стиль окна -->
+    <Style x:Key="WindowStyle" TargetType="Window">
+        <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
+    </Style>
+
+    <!-- Стили для ползунка (Thumb) -->
     <Style x:Key="VerticalThumbStyle" TargetType="{x:Type Thumb}">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="IsTabStop" Value="False"/>
@@ -133,9 +152,9 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
                     <Border Background="#4CAF50"
-                    BorderThickness="1"
-                    BorderBrush="#45a049"
-                    CornerRadius="4"/>
+                            BorderThickness="1"
+                            BorderBrush="#45a049"
+                            CornerRadius="{StaticResource CornerRadius}"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -149,49 +168,45 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
                     <Border Background="#4CAF50"
-                    BorderThickness="1"
-                    BorderBrush="#45a049"
-                    CornerRadius="4"/>
+                            BorderThickness="1"
+                            BorderBrush="#45a049"
+                            CornerRadius="{StaticResource CornerRadius}"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <!-- Стиль для полосы прокрутки -->
+    <!-- Полоса прокрутки (общая) -->
     <Style x:Key="CustomScrollBar" TargetType="{x:Type ScrollBar}">
         <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
         <Setter Property="Stylus.IsFlicksEnabled" Value="false"/>
-        <Setter Property="Margin" Value="-12 0 0 0"/>
         <Setter Property="MinWidth" Value="12"/>
-
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ScrollBar}">
-                    
                     <Grid SnapsToDevicePixels="True">
-                        
-                        <Border Background="#f0f0f0" CornerRadius="6"/>
-                        <Track Name="PART_Track" IsDirectionReversed="True"/>
+                        <Border Background="#f0f0f0" CornerRadius="{StaticResource CornerRadius}"/>
+                        <Track Name="PART_Track" IsDirectionReversed="True">
+                            <Track.Thumb>
+                                <Thumb Style="{StaticResource VerticalThumbStyle}"/>
+                            </Track.Thumb>
+                        </Track>
                     </Grid>
-                    
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <!-- Триггеры на ориентацию -->
         <Style.Triggers>
-            <!-- Для вертикальной полосы -->
+            <!-- Вертикальная полоса -->
             <Trigger Property="Orientation" Value="Vertical">
                 <Setter Property="Width" Value="8"/>
                 <Setter Property="Height" Value="Auto"/>
-
                 <Setter Property="Margin" Value="-12 0 3 0"/>
-                <!-- Дополнительные настройки для вертикального ползунка -->
                 <Setter Property="Background" Value="#f0f0f0"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type ScrollBar}">
                             <Grid SnapsToDevicePixels="True">
-                                <Border Background="#f0f0f0" CornerRadius="4"/>
+                                <Border Background="#f0f0f0" CornerRadius="{StaticResource CornerRadius}"/>
                                 <Track Name="PART_Track" IsDirectionReversed="True">
                                     <Track.DecreaseRepeatButton>
                                         <RepeatButton Command="ScrollBar.LineUpCommand"
@@ -211,19 +226,17 @@
                 </Setter>
             </Trigger>
 
-            <!-- Для горизонтальной полосы -->
+            <!-- Горизонтальная полоса -->
             <Trigger Property="Orientation" Value="Horizontal">
                 <Setter Property="Width" Value="Auto"/>
                 <Setter Property="Height" Value="8"/>
-
                 <Setter Property="Margin" Value="0 3 -12 0"/>
-                <!-- Дополнительные настройки для горизонтального ползунка -->
                 <Setter Property="Background" Value="#f0f0f0"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type ScrollBar}">
                             <Grid SnapsToDevicePixels="True">
-                                <Border Background="#f0f0f0" CornerRadius="4"/>
+                                <Border Background="#f0f0f0" CornerRadius="{StaticResource CornerRadius}"/>
                                 <Track Name="PART_Track" IsDirectionReversed="False">
                                     <Track.DecreaseRepeatButton>
                                         <RepeatButton Command="ScrollBar.LineLeftCommand"
@@ -244,5 +257,62 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    
+
+    <!-- Стиль для ListBox (контейнер) -->
+    <Style x:Key="ListBoxStyle" TargetType="ListBox">
+        <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource PrimaryColor}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="2"/>
+        <Setter Property="ItemContainerStyle" Value="{DynamicResource ListBoxItemStyle}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBox">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{StaticResource CornerRadius}"
+                            Padding="{TemplateBinding Padding}">
+                        <ScrollViewer Focusable="False">
+                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Стиль для элементов ListBox -->
+    <Style x:Key="ListBoxItemStyle" TargetType="ListBoxItem">
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Padding" Value="8,6"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="{StaticResource CornerRadius}"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource ListItemSelected}"/>
+                            <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource ListItemHover}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{StaticResource DisabledBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

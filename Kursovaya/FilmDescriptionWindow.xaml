@@ -10,7 +10,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="{Binding Title}" FontSize="24" FontWeight="Bold" Margin="0,0,0,20" Style="{DynamicResource LoginStyle}"/>
+        <TextBlock Text="{Binding Title}" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <ScrollViewer.Resources>
@@ -18,13 +18,13 @@
             </ScrollViewer.Resources>
             <StackPanel>
                 <Image Source="{Binding MoviePreview}" MaxWidth="300" MaxHeight="400" Margin="0,0,0,20" Stretch="Uniform"/>
-                <TextBlock Text="Время:" FontWeight="Bold" Style="{DynamicResource LoginStyle}"/>
+                <TextBlock Text="Время:" FontWeight="Bold" />
                 <TextBlock Text="{Binding Time}" Margin="0,0,0,10" Style="{DynamicResource TextBlockStyle}"/>
 
-                <TextBlock Text="Цена:" FontWeight="Bold" Style="{DynamicResource LoginStyle}"/>
+                <TextBlock Text="Цена:" FontWeight="Bold" />
                 <TextBlock Text="{Binding Price}" Margin="0,0,0,10" Style="{DynamicResource TextBlockStyle}"/>
 
-                <TextBlock Text="Описание:" FontWeight="Bold" Style="{DynamicResource LoginStyle}"/>
+                <TextBlock Text="Описание:" FontWeight="Bold" />
                 <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Style="{DynamicResource TextBlockStyle}"/>
             </StackPanel>
         </ScrollViewer>
