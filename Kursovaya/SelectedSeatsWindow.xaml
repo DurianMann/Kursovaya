@@ -6,11 +6,14 @@
         WindowStartupLocation="CenterScreen">
     <Grid>
         <StackPanel>
-            <UniformGrid x:Name="SeatsGrid" Rows="10" Columns="11" Margin="10">
+            <UniformGrid x:Name="SeatsGrid" Rows="10" Columns="11" Margin="10" Height="auto">
             <!-- Здесь будут кнопки-места -->
         </UniformGrid>
-        <Label Name="BalanceLabel" Margin="10" Content="Итого:" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
-        <Label Margin="10 10 10 0" Content="Время сеанса:" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+            <DockPanel Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                <Label Name="TitleLabel" Content="{Binding SelectedFilm.Title}" HorizontalAlignment="Left" FontSize="28" VerticalAlignment="Top"/>
+                <Label Name="BalanceLabel" Content="Итого:" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+            </DockPanel>
+        <Label Margin="10 0" Content="Время сеанса:" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
             <ComboBox x:Name="comboBox1" Width="120" ItemsSource="{Binding SelectedFilm.Time}" SelectionChanged="ComboBox_SelectedIndexChanged" HorizontalAlignment="Right" SelectedItem="{Binding SelectedTime}" Margin="10"/>
             <Button Content="Подтвердить заказ" Click="ConfirmOrder_Click" Margin="10" HorizontalAlignment="Right" Style="{DynamicResource BaseButtonStyle}"/>
         </StackPanel>

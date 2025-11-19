@@ -36,20 +36,5 @@ namespace Kursovaya
                 new Film { idFilm = 5, MoviePreview = "https://sun9-33.userapi.com/s/v1/ig2/_qsHuCMy8bFuTssIBK1hypfxeaEbBUG_LKOATxzT1MI8IcsEXA2ARsw843vHR4cGDTAneaVpz540KfGcegOt5o9q.jpg?quality=95&as=32x43,48x64,72x96,108x144,160x213,240x320,360x480,480x640,540x720,640x853,720x960,1080x1440,1280x1707,1440x1920,1920x2560&from=bu&cs=1920x0", Title = "Качка-Боссы", Time = new List<TimeOnly>{new TimeOnly(19, 00),new TimeOnly(21, 00),new TimeOnly(22, 45)}, Price = 20000000 , Description = "Студент НМК Имамов Марат со своимим друзьями решили стать качками, но в качалке где они качаются не просто накачаться, нужно знать все тонкости этого дела, только так можно стать боссом качалки - Качка-Боссом" }
 
         };
-
-        public void Main(string[] args)
-        {
-            string dbName = "KursBD.bd";
-
-            string connectionString = $"DataSource={dbName};Version=3;";
-
-            using (var connection = new SQLiteConnection(connectionString))
-            {
-                connection.Open();
-
-
-            }
-        }
-
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Kursovaya;
@@ -9,50 +8,64 @@ namespace Kursovaya
 {
     public partial class LoginWindow : Window
     {
-        private Dictionary<string, User> users = User.users;
         private User currentUser;
-        
+
         public LoginWindow()
         {
             InitializeComponent();
             this.DataContext = this;
         }
 
-        private void Login_Click(object sender, RoutedEventArgs e)
+        private async void Login_Click(object sender, RoutedEventArgs e)
         {
             string enteredUsername = txtUsername.Text;
             string enteredPassword = txtPassword.Password;
 
-            if (!users.TryGetValue(enteredUsername, out User user))
+            if (string.IsNullOrWhiteSpace(enteredUsername) || string.IsNullOrWhiteSpace(enteredPassword))
             {
-                MessageBox.Show($"Пользователь не найден!\nПроверьте правильность данных аккаунта и повторите попытку","Пользователь не найден",MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    "Пожалуйста, заполните все поля.",
+                    "Ошибка ввода",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
                 return;
             }
-
-            if (user.Password != enteredPassword)
-            {
-                MessageBox.Show("Неверный пароль!","error",MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            currentUser = user;
 
             try
             {
+                // Асинхронно ищем пользователя по логину и паролю
+                currentUser = await User.FindByCredentialsAsync(enteredUsername, enteredPassword);
+
+                if (currentUser == null)
+                {
+                    MessageBox.Show(
+                        "Пользователь не найден или неверный пароль.\nПроверьте данные и повторите попытку.",
+                        "Ошибка входа",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                    return;
+                }
+
+                // Успешный вход — открываем главное окно
                 new MainWindow(currentUser).Show();
                 this.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка: {ex.Message} ");
+                MessageBox.Show(
+                    $"Ошибка при входе: {ex.Message}\nПроверьте подключение к базе данных.",
+                    "Критическая ошибка",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
+
         private void Register_Click(object sender, RoutedEventArgs e)
         {
-            // Вызываем диалог с окном, где происходит регистрация
-            var registerWindow = new RegisterWindow(users);
+            var registerWindow = new RegisterWindow(); // Теперь не передаём словарь — всё в БД
             registerWindow.ShowDialog();
+
+            // После регистрации можно обновить список пользователей (если нужно)
         }
     }
-
 }
