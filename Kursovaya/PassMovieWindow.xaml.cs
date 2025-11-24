@@ -13,7 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using static User;
+
 
 namespace Kursovaya
 {
@@ -22,56 +22,60 @@ namespace Kursovaya
     /// </summary>
     public partial class PassMovieWindow : Window
     {
-        public List<Booking> Bookings { get; set; }
-        public string Seats { get; set; }
         public Booking SelectedBooking { get; set; }
-        public Collection<Film> Films { get; set; }
-
-        private ObservableCollection<Booking> passes;
-        public PassMovieWindow()
+        private List<Booking> passes;
+        private AppDbContext _context = new AppDbContext();
+        public PassMovieWindow(AppDbContext context)
         {
             InitializeComponent();
-            this.DataContext = this;
-        }
-
-        public PassMovieWindow(User user) : this()
-        {
-            Bookings = Bookings;
-            passes = new ObservableCollection<Booking>();
-            PassesList.ItemsSource = passes;
-            Films = Film.films;
-            foreach (Booking booking in user.Bookings)
+            passes = new List<Booking>();
+            foreach (Booking booking in context.Bookings.ToList())
             {
-                Seats = booking.Seats;
-                passes.Add(booking);
+                if (booking.UserId == MainWindow.currentUser.Id) 
+                    passes.Add(booking);
             }
-
+            PassesList.ItemsSource = passes;
         }
-
         private void ViewBooking_Changed(object sender, SelectionChangedEventArgs e)
         {
             // Сохраняем выбранный билет
             SelectedBooking = PassesList.SelectedItem as Booking;
+            PassesList.UpdateLayout();
             Debug.WriteLine(SelectedBooking);
         }
         public void ViewBookingFilmClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                foreach (Film film in Films)
+                foreach (Film film in _context.Films.ToList())
                 {
-                    if (SelectedBooking.FilmTitle == film.Title)
-                    {
+                    if (SelectedBooking.FilmTitle == film.Title) 
+                    { 
                         Debug.WriteLine(SelectedBooking.FilmTitle);
-                        var selectSeatsWindow = new SelectSeatsWindow(film);
+                        var selectSeatsWindow = new SelectSeatsWindow(film, SelectedBooking.SessionTime, _context);
                         selectSeatsWindow.Show();
                     }
                 }
             }
             catch (NullReferenceException ex) { MessageBox.Show(ex.Message + "\nВыберите билет и перейдите по купленным местам" + "\nЕсли билета нет, то удостоверьтесь в правильности платежа и попробуйте снова"); }
-
         }
-
-       
+        public void ReturnPassBookingClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (SeatManager.IsSeatAvailable(SelectedBooking.FilmTitle, SelectedBooking.SessionTime, SelectedBooking.PreviewSeats))
+                {
+                    SeatManager.RemoveBookSeat(SelectedBooking.FilmTitle, SelectedBooking.SessionTime, SelectedBooking.Id);
+                    _context.Users.Where(x => x.Id == MainWindow.currentUser.Id).ToList().ForEach(x => x.Balance += SelectedBooking.TotalPrice);
+                    passes.Remove(SelectedBooking);
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    MessageBox.Show("Средства уже возвращены на счет, проверьте счет позже");
+                }
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message + "\nПроизошла ошибка при возврате средств"); }
+        }
     }
 }

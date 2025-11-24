@@ -1,39 +1,52 @@
-﻿using static Kursovaya.MainWindow;
-using System.Windows;
+﻿using System.Windows;
+using static Kursovaya.MainWindow;
+using Microsoft.EntityFrameworkCore;
 
 namespace Kursovaya
 {
     public partial class RegisterWindow : Window
     {
-        private Dictionary<string, User> users;
-
-        public RegisterWindow(Dictionary<string, User> userDictionary)
+        private readonly AppDbContext _context;
+        public RegisterWindow(AppDbContext context)
         {
             InitializeComponent();
-            users = userDictionary;
+            _context = context;
             this.DataContext = this;
         }
-
         private void Register_Click(object sender, RoutedEventArgs e)
         {
             string username = txtRegisterUsername.Text;
             string password = txtRegisterPassword.Password;
-
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
-                MessageBox.Show("Введите логин и пароль!");
+                MessageBox.Show("Введите логин и пароль!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-
-            if (users.ContainsKey(username))
+            try
             {
-                MessageBox.Show("Пользователь с таким логином уже существует!");
-                return;
+                if (_context.Users.Any(u => u.Username == username))
+                {
+                    MessageBox.Show("Пользователь с таким логином уже существует!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+                var newUser = new User
+                {
+                    Username = username,
+                    Password = password,
+                    Balance = 0
+                };
+                _context.Users.Add(newUser);
+                _context.SaveChanges();
+                MessageBox.Show("Регистрация успешна! Теперь вы можете войти в систему.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                Close();
             }
-
-            User.users.Add(username, new User(username, password));
-            Close();
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при регистрации: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
+        
     }
-
+    
 }
+

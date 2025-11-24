@@ -11,7 +11,7 @@
         </UniformGrid>
         <Label Name="BalanceLabel" Margin="10" Content="Итого:" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
         <Label Margin="10 10 10 0" Content="Время сеанса:" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
-            <ComboBox x:Name="comboBox1" Width="120" ItemsSource="{Binding SelectedFilm.Time}" SelectionChanged="ComboBox_SelectedIndexChanged" HorizontalAlignment="Right" SelectedItem="{Binding SelectedTime}" Margin="10"/>
+            <ComboBox x:Name="comboBox1" Width="120" ItemsSource="{Binding SelectedFilm.TimeSlots}" SelectionChanged="ComboBox_SelectedIndexChanged" HorizontalAlignment="Right" SelectedItem="{Binding SelectedTime}" Margin="10"/>
             <Button Content="Подтвердить заказ" Click="ConfirmOrder_Click" Margin="10" HorizontalAlignment="Right" Style="{DynamicResource BaseButtonStyle}"/>
         </StackPanel>
     </Grid>

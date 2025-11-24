@@ -1,9 +1,11 @@
 ﻿using Kursovaya;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows;
-using System.Windows.Controls.Primitives;
+using Microsoft.EntityFrameworkCore;
+using SQLitePCL;
 using System.Diagnostics;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Media;
 namespace Kursovaya
 {
     public partial class SelectSeatsWindow : Window
@@ -11,28 +13,27 @@ namespace Kursovaya
         private List<string> selectedSeats = new List<string>();
         public Film SelectedFilm { get; set; }
         public TimeOnly SelectedTime { get; set; }
-        
-        public decimal TotalPrice { get; set; }// Добавляем свойство для фильма
-
-        public SelectSeatsWindow(Film film)
+        public decimal TotalPrice { get; set; }
+        private AppDbContext _context;
+        public SelectSeatsWindow(Film film, AppDbContext context)
         {
             InitializeComponent();
             this.DataContext = this;
             SelectedFilm = film;
-
+            _context = context;
             CreateSeatsGrid();
             MarkBookedSeats();
         }
-        public SelectSeatsWindow(Film film,TimeOnly selectedTime)
+        public SelectSeatsWindow(Film film,TimeOnly selectedTime, AppDbContext context)
         {
             InitializeComponent();
             this.DataContext = this;
             SelectedFilm = film;
-
+            SelectedTime = selectedTime;
+            _context = context;
             CreateSeatsGrid();
             MarkBookedSeats();
         }
-
         private void UpdatePriceLabel()
         {
             BalanceLabel.Content = $"Итого: {TotalPrice} руб.";
@@ -148,14 +149,15 @@ namespace Kursovaya
                 SelectedTime,
                 selectedSeats,
                 TotalPrice,
-                MainWindow.currentUser
+                MainWindow.currentUser,
+                _context
             );
             confirmWindow.ShowDialog();
             selectedSeats.Clear();
             TotalPrice = 0;
             UpdatePriceLabel();
             MarkBookedSeats();
-            Close();// Обновляем отображение мест
+            Close();
         }
     }
 }

@@ -5,7 +5,7 @@ namespace Kursovaya
     {
         private User currentUser;
 
-        public TopUpWindow(User user)
+        public TopUpWindow(User user, AppDbContext context)
         {
             InitializeComponent();
             currentUser = user;

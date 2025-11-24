@@ -22,7 +22,7 @@ namespace Kursovaya
         public FilmDescriptionWindow(Film film)
         {
             InitializeComponent();
-            DataContext = film; // Привязываем данные фильма к окну
+            DataContext = film;// Привязываем данные фильма к окну
         }
     }
 }

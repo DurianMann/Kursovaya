@@ -12,24 +12,56 @@ namespace Kursovaya
 {
     public partial class MainWindow : Window
     {
+        private readonly AppDbContext _context;
         public static User currentUser;
-        
         public Film SelectedFilm { get; set; }
         public static decimal UserBalance { get; set; } = 1000;
-
-
-        public MainWindow(User user)
+        public MainWindow(User user, AppDbContext context)
         {
             InitializeComponent();
             currentUser = user;
+            _context = context;
             LoginLabel.Text = user.Username;
-            currentUser.BalanceChanged += (sender, e) => UpdateBalanceLabel();
             UpdateBalanceLabel();
-
-            FilmList.ItemsSource = Film.films;
+            LoadFilms();
+            context.Users.Update(user);
+        }
+        private void LoadFilms()
+        {
+            try
+            {
+                var films = _context.Films.ToList();
+                FilmList.ItemsSource = films;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки фильмов: {ex.Message}");
+            }
+        }
+        private void TopUp_Click(object sender, RoutedEventArgs e)
+        {
+            var topUpWindow = new TopUpWindow(currentUser, _context);
+            topUpWindow.ShowDialog();
+            UpdateBalanceLabel();
         }
 
-
+        private void CheckSeats_Click(object sender, RoutedEventArgs e)
+        {
+            var passMovieWindow = new PassMovieWindow(_context);
+            passMovieWindow.ShowDialog();
+        }
+        private void SelectSeats_Click(object sender, RoutedEventArgs e)
+        {
+            if (FilmList.SelectedItem is Film selectedFilm)
+            {
+                var selectSeatsWindow = new SelectSeatsWindow(selectedFilm, _context);
+                selectSeatsWindow.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Выберите фильм");
+            }
+        }
         private void LogOut_Click(object sender, RoutedEventArgs e)
         {
             currentUser = null;
@@ -40,47 +72,16 @@ namespace Kursovaya
                 Close();
             }
         }
-        private void TopUp_Click(object sender, RoutedEventArgs e)
-        {
-            var topUpWindow = new TopUpWindow(currentUser);
-            topUpWindow.Owner = this;
-            topUpWindow.ShowDialog();
-        }
         public void UpdateBalanceLabel()
         {
             BalanceLabel.Content = $"{currentUser.Balance} руб.";
+            _context.SaveChanges();
         }
         private void FilmList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // Сохраняем выбранный фильм
             SelectedFilm = FilmList.SelectedItem as Film;
         }
-        
-        private void SelectSeats_Click(object sender, RoutedEventArgs e)
-        {
-            // Передаем выбранный фильм в окно выбора мест
-            if (SelectedFilm == null)
-            {
-                MessageBox.Show("Выберите фильм");
-            }
-            else 
-            {
-                var selectSeatsWindow = new SelectSeatsWindow(SelectedFilm)
-                {
-                    SelectedFilm = SelectedFilm
-                };
-                selectSeatsWindow.Owner = this;
-                selectSeatsWindow.ShowDialog();
-            }
-        }
-        private void CheckSeats_Click(object sender, RoutedEventArgs e)
-        {
-            // Передаем забронированные места
-            var passMovieWindow = new PassMovieWindow(currentUser);
-                passMovieWindow.Owner = this;
-                passMovieWindow.ShowDialog();
-        }
-
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             // Закрываем все дочерние окна
@@ -105,7 +106,7 @@ namespace Kursovaya
             // Пример: создаём и показываем окно с описанием
             var descriptionWindow = new FilmDescriptionWindow(film);
             descriptionWindow.Owner = this;
-            descriptionWindow.ShowDialog(); // или Show(), если не нужен модальный диалог
+            descriptionWindow.ShowDialog();
         }
     }
 }

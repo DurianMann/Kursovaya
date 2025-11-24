@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Controls;
 using Kursovaya;
+using Microsoft.EntityFrameworkCore;
 
 namespace Kursovaya
 {
     public partial class LoginWindow : Window
     {
-        private Dictionary<string, User> users = User.users;
-        private User currentUser;
-        
         public LoginWindow()
         {
             InitializeComponent();
@@ -23,18 +18,14 @@ namespace Kursovaya
             string enteredUsername = txtUsername.Text;
             string enteredPassword = txtPassword.Password;
 
-            if (!users.TryGetValue(enteredUsername, out User user))
+            try
             {
-                MessageBox.Show($"Пользователь не найден!\nПроверьте правильность данных аккаунта и повторите попытку","Пользователь не найден",MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
+                // Ищем пользователя в базе данных
+                var context = App.Context;
+                var user = context.Users
+                    .FirstOrDefault(u => u.Username == enteredUsername && u.Password == enteredPassword);
 
-            if (user.Password != enteredPassword)
-            {
-                MessageBox.Show("Неверный пароль!","error",MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-                if (currentUser == null)
+                if (user == null)
                 {
                     MessageBox.Show(
                         "Пользователь не найден или неверный пароль.\nПроверьте данные и повторите попытку.",
@@ -44,23 +35,26 @@ namespace Kursovaya
                     return;
                 }
 
-            currentUser = user;
+                // Загружаем связанные данные (бронирования)
+                context.Entry(user).Collection(u => u.Bookings).Load();
 
-            try
-            {
-                new MainWindow(currentUser).Show();
-                this.Close();
+                // Создаем главное окно с пользователем и контекстом БД
+                var mainWindow = new MainWindow(user,context);
+                mainWindow.Show();
+                Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка: {ex.Message} ");
+                MessageBox.Show($"Ошибка при входе: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         private void Register_Click(object sender, RoutedEventArgs e)
         {
-            // Вызываем диалог с окном, где происходит регистрация
-            var registerWindow = new RegisterWindow(users);
-            registerWindow.ShowDialog();
+            
+                // Передаем контекст БД в окно регистрации
+                var registerWindow = new RegisterWindow(App.Context);
+                registerWindow.ShowDialog();
+            
         }
     }
 

@@ -10,7 +10,10 @@
         WindowStartupLocation="CenterScreen">
     <Grid>
         <StackPanel>
-            <Button x:Name="ViewBookingFilmButton" Content="Посмотреть выбранное место" Click="ViewBookingFilmClick" Style="{DynamicResource BaseButtonStyle}" Margin="10" HorizontalAlignment="Left"/>
+            <DockPanel>
+                <Button x:Name="ViewBookingFilmButton" Content="Перейти к фильму" Click="ViewBookingFilmClick" Style="{DynamicResource BaseButtonStyle}" Margin="10" HorizontalAlignment="Left"/>
+                <Button x:Name="ReturnPassBookingButton" Content="Отменить покупку" Click="ReturnPassBookingClick" Style="{DynamicResource BaseButtonStyle}" Margin="10" HorizontalAlignment="Left"/>
+            </DockPanel>
             <ListBox x:Name="PassesList" SelectionChanged="ViewBooking_Changed" MaxHeight="350" Style="{DynamicResource ListBoxStyle}" Margin="10">
                 <ListBox.Resources>
                     <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource CustomScrollBar}"/>
@@ -30,7 +33,7 @@
 
                             <StackPanel Orientation="Horizontal" Margin="5">
                                 <TextBlock Text="Выбранные места:" FontWeight="Bold"/>
-                                <TextBlock Text="{Binding Seats}" x:Name="SelectedSeatsTextBlock" Margin="0 0 20 0"/>
+                                <TextBlock Text="{Binding PreviewSeats}" x:Name="SelectedSeatsTextBlock" Margin="0 0 20 0"/>
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="5">
