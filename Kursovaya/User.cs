@@ -10,6 +10,9 @@ public class User
     public List<Booking> Bookings { get; set; } = new List<Booking>();
 
     public event EventHandler BalanceChanged;
+    // Навигация: один пользователь — много бронирований
+    public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+}
 
     public class Booking
     {

@@ -36,7 +36,7 @@ namespace Kursovaya
 
         public PassMovieWindow(User user) : this()
         {
-            Bookings = user.Bookings;
+            Bookings = Bookings;
             passes = new ObservableCollection<Booking>();
             PassesList.ItemsSource = passes;
             Films = Film.films;

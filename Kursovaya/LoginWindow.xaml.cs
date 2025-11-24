@@ -34,6 +34,15 @@ namespace Kursovaya
                 MessageBox.Show("Неверный пароль!","error",MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+                if (currentUser == null)
+                {
+                    MessageBox.Show(
+                        "Пользователь не найден или неверный пароль.\nПроверьте данные и повторите попытку.",
+                        "Ошибка входа",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                    return;
+                }
 
             currentUser = user;
 

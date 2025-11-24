@@ -53,14 +53,14 @@ namespace Kursovaya
             }
             
             // Создаем запись о бронировании
-            User.Booking booking = new User.Booking
+            Booking booking = new Booking
             {
                 FilmTitle = FilmTitle,
                 SessionTime = SessionTime,
                 Seats = string.Join(", ", SelectedSeats),
                 TotalPrice = TotalPrice,
                 BookingDate = BookingDate,
-                Username = ThisUser.Username
+                User = ThisUser
             };
 
             // Сохраняем в историю пользователя

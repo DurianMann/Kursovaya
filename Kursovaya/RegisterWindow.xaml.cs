@@ -1,5 +1,6 @@
 ﻿using static Kursovaya.MainWindow;
 using System.Windows;
+
 namespace Kursovaya
 {
     public partial class RegisterWindow : Window
