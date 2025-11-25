@@ -1,12 +1,8 @@
-﻿using System.Windows;
-using System.Collections.ObjectModel;
-using Kursovaya;
-using System.Windows.Controls;
-using static Kursovaya.MainWindow;
-using System.Runtime.CompilerServices;
-using System.Windows.Input;
-using System.Diagnostics;
+﻿using System;
 using System.ComponentModel;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Kursovaya
 {
@@ -15,17 +11,48 @@ namespace Kursovaya
         private readonly AppDbContext _context;
         public static User currentUser;
         public Film SelectedFilm { get; set; }
-        public static decimal UserBalance { get; set; } = 1000;
+        public static decimal UserBalance { get; set; }
+
         public MainWindow(User user, AppDbContext context)
         {
             InitializeComponent();
-            currentUser = user;
-            _context = context;
-            LoginLabel.Text = user.Username;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            currentUser = user ?? throw new ArgumentNullException(nameof(user));
+
+            RefreshUserBalance();
             UpdateBalanceLabel();
+
+            LoginLabel.Text = currentUser.Username;
             LoadFilms();
-            context.Users.Update(user);
         }
+
+        /// <summary>
+        /// Перезагружает баланс пользователя из базы данных.
+        /// </summary>
+        private void RefreshUserBalance()
+        {
+            try
+            {
+                currentUser = _context.Users.Find(currentUser.Id)
+                    ?? throw new InvalidOperationException("Пользователь не найден в базе данных.");
+
+                UserBalance = currentUser.Balance;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Ошибка при обновлении баланса: {ex.Message}",
+                    "Ошибка",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+
+                UserBalance = 0m;
+            }
+        }
+
+        /// <summary>
+        /// Загружает список фильмов из базы данных и отображает в интерфейсе.
+        /// </summary>
         private void LoadFilms()
         {
             try
@@ -35,13 +62,20 @@ namespace Kursovaya
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка загрузки фильмов: {ex.Message}");
+                MessageBox.Show(
+                    $"Ошибка загрузки фильмов: {ex.Message}",
+                    "Ошибка",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
+
         private void TopUp_Click(object sender, RoutedEventArgs e)
         {
             var topUpWindow = new TopUpWindow(currentUser, _context);
             topUpWindow.ShowDialog();
+
+            RefreshUserBalance();
             UpdateBalanceLabel();
         }
 
@@ -49,42 +83,53 @@ namespace Kursovaya
         {
             var passMovieWindow = new PassMovieWindow(_context);
             passMovieWindow.ShowDialog();
+
+            RefreshUserBalance();
+            UpdateBalanceLabel();
         }
+
         private void SelectSeats_Click(object sender, RoutedEventArgs e)
         {
-            if (FilmList.SelectedItem is Film selectedFilm)
+            if (FilmList.SelectedItem is not Film selectedFilm)
             {
-                var selectSeatsWindow = new SelectSeatsWindow(selectedFilm, _context);
-                selectSeatsWindow.ShowDialog();
+                MessageBox.Show("Выберите фильм.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
             }
-            else
-            {
-                MessageBox.Show("Выберите фильм");
-            }
+
+            var selectSeatsWindow = new SelectSeatsWindow(selectedFilm, _context);
+            selectSeatsWindow.ShowDialog();
+
+            RefreshUserBalance();
+            UpdateBalanceLabel();
         }
+
         private void LogOut_Click(object sender, RoutedEventArgs e)
         {
             currentUser = null;
-            LoginWindow loginWindow = new LoginWindow();
+            var loginWindow = new LoginWindow();
             loginWindow.Show();
+
             if (loginWindow.IsVisible)
             {
                 Close();
             }
         }
+
+        /// <summary>
+        /// Обновляет отображение баланса на интерфейсе.
+        /// </summary>
         public void UpdateBalanceLabel()
         {
-            BalanceLabel.Content = $"{currentUser.Balance} руб.";
-            _context.SaveChanges();
+            BalanceLabel.Content = $"{UserBalance:F2} руб.";
         }
+
         private void FilmList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Сохраняем выбранный фильм
             SelectedFilm = FilmList.SelectedItem as Film;
         }
+
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            // Закрываем все дочерние окна
             foreach (Window window in Application.Current.Windows)
             {
                 if (window != this && window.Owner == this)
@@ -93,21 +138,20 @@ namespace Kursovaya
                 }
             }
         }
+
         private void FilmList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var selectedItem = FilmList.SelectedItem as Film;
-            if (selectedItem != null)
+            if (FilmList.SelectedItem is Film film)
             {
-                ShowFilmDescription(selectedItem);
+                ShowFilmDescription(film);
             }
         }
+
         private void ShowFilmDescription(Film film)
         {
-            // Пример: создаём и показываем окно с описанием
             var descriptionWindow = new FilmDescriptionWindow(film);
             descriptionWindow.Owner = this;
             descriptionWindow.ShowDialog();
         }
     }
 }
-

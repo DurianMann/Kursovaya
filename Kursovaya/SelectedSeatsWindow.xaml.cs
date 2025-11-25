@@ -146,6 +146,7 @@ namespace Kursovaya
             }
             var confirmWindow = new ConfirmOrderWindow(
                 SelectedFilm.Title,
+                SelectedFilm.Id,
                 SelectedTime,
                 selectedSeats,
                 TotalPrice,

@@ -12,7 +12,7 @@
         <StackPanel>
             <DockPanel>
                 <Button x:Name="ViewBookingFilmButton" Content="Перейти к фильму" Click="ViewBookingFilmClick" Style="{DynamicResource BaseButtonStyle}" Margin="10" HorizontalAlignment="Left"/>
-                <Button x:Name="ReturnPassBookingButton" Content="Отменить покупку" Click="ReturnPassBookingClick" Style="{DynamicResource BaseButtonStyle}" Margin="10" HorizontalAlignment="Left"/>
+                <Button x:Name="CancelBookingButton" Content="Отменить покупку" Click="CancelBookingClick" Style="{DynamicResource BaseButtonStyle}" Margin="10" HorizontalAlignment="Left"/>
             </DockPanel>
             <ListBox x:Name="PassesList" SelectionChanged="ViewBooking_Changed" MaxHeight="350" Style="{DynamicResource ListBoxStyle}" Margin="10">
                 <ListBox.Resources>

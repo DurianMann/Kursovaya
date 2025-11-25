@@ -5,6 +5,7 @@ namespace Kursovaya
     public partial class ConfirmOrderWindow : Window
     {
         public string FilmTitle { get; set; }
+        public int FilmId { get; set; }
         public TimeOnly SessionTime { get; set; }
         public List<string> SelectedSeats { get; set; }
         public decimal TotalPrice { get; set; }
@@ -16,10 +17,11 @@ namespace Kursovaya
             InitializeComponent();
             this.DataContext = this;
         }
-        public ConfirmOrderWindow(string filmTitle, TimeOnly sessionTime, List<string> selectSeats,
+        public ConfirmOrderWindow(string filmTitle, int filmId, TimeOnly sessionTime, List<string> selectSeats,
             decimal totalPrice, User user, AppDbContext context) : this()
         {
             FilmTitle = filmTitle;
+            FilmId = filmId;
             SessionTime = sessionTime;
             SelectedSeats = selectSeats;
             TotalPrice = totalPrice;
@@ -39,36 +41,51 @@ namespace Kursovaya
         {
             if (TotalPrice > ThisUser.Balance)
             {
-                MessageBox.Show("Недостаточно средств на балансе!");
+                MessageBox.Show("Недостаточно средств на балансе!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            foreach (string seat in SelectedSeats)
+
+            try
             {
-                SeatManager.BookSeat(FilmTitle, SessionTime, seat);
-            }
-            // Создаем запись о бронировании
-            Booking booking = new Booking
-            {
-                FilmTitle = FilmTitle,
-                SessionTime = SessionTime,
-                Seats = SelectedSeats,
-                TotalPrice = TotalPrice,
-                BookingDate = BookingDate,
-                UserId = ThisUser.Id
-            };
-            // Сохраняем в историю пользователя
-            if (booking != null && ThisUser.Bookings != null)
-            {
-                ThisUser.Bookings.Add(booking);
+                // 1. Проверяем доступность ВСЕХ мест
+                foreach (string seat in SelectedSeats)
+                {
+                    if (!SeatManager.IsSeatAvailable(FilmTitle, SessionTime, seat))
+                    {
+                        MessageBox.Show($"Место {seat} уже занято. Выберите другие места.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+                }
+
+                // 2. Создаём ОДНО бронирование на все места
+                var booking = new Booking
+                {
+                    FilmTitle = FilmTitle,
+                    FilmId = FilmId,
+                    SessionTime = SessionTime,
+                    Seats = SelectedSeats, // Все места в одном списке
+                    TotalPrice = TotalPrice,
+                    BookingDate = BookingDate,
+                    UserId = ThisUser.Id
+                };
+
+                // 3. Обновляем баланс пользователя
                 ThisUser.Balance -= TotalPrice;
+
+                // 4. Сохраняем в БД
+                _context.Bookings.Add(booking);
+                _context.Users.Update(ThisUser);
                 _context.SaveChanges();
+
+                MessageBox.Show("Бронирование успешно оформлено!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                 Close();
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Произошла ошибка при покупке билета");
+                MessageBox.Show($"Произошла ошибка: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             Close();

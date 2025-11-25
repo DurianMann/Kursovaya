@@ -191,6 +191,7 @@ namespace Kursovaya
         [NotMapped]
         public string PreviewSeats { get { return string.Join(", ", Seats); } }
         public string FilmTitle {  get; set; }
+        public virtual User User { get; set; }
     }
     [Keyless]
     [Table("FilmSearch")]
