@@ -189,7 +189,7 @@ namespace Kursovaya
         public decimal TotalPrice { get; set; }
         public DateTime BookingDate { get; set; } = DateTime.Now;
         [NotMapped]
-        public string PreviewSeats { get { return string.Join(", ", Seats); } }
+        public string PreviewSeats { get {return string.Join(", ", Seats); } }
         public string FilmTitle {  get; set; }
         public virtual User User { get; set; }
     }

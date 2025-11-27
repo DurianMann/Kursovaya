@@ -85,7 +85,6 @@ namespace Kursovaya
                 MessageBox.Show($"Произошла ошибка: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             Close();

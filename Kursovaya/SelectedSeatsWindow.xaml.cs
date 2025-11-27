@@ -89,6 +89,8 @@ namespace Kursovaya
                     {
                         button.IsEnabled = false;
                         button.ToolTip = "Место занято";
+                        button.HorizontalAlignment = HorizontalAlignment.Center;
+                        button.VerticalAlignment = VerticalAlignment.Center;
                     }
                     else
                     {
@@ -107,7 +109,7 @@ namespace Kursovaya
                 // Снятие выбора
                 selectedSeats.Remove(seat);
                 TotalPrice -= SelectedFilm.Price;
-                button.Background = (SolidColorBrush)Application.Current.FindResource("PrimaryColor");
+                button.Style = (Style)Application.Current.Resources["BaseButtonStyle"];
             }
             else
             {
@@ -120,7 +122,7 @@ namespace Kursovaya
                 // Выбор места
                 selectedSeats.Add(seat);
                 TotalPrice += SelectedFilm.Price;
-                button.Background = (SolidColorBrush)Application.Current.FindResource("DisabledBrush");
+                button.Style = (Style)Application.Current.Resources["PressedSeatButtonStyle"];
             }
             UpdatePriceLabel();
         }

@@ -22,17 +22,17 @@
                     <DataTemplate>
                         <StackPanel Orientation="Vertical" Margin="10" >
                             <StackPanel Orientation="Horizontal" Margin="5">
-                                <TextBlock Text="Фильм:" FontWeight="Bold"/>
+                                <TextBlock Text="Фильм:" />
                                 <TextBlock Text="{Binding FilmTitle}" x:Name="FilmTitleTextBlock" Margin="0 0 20 0"/>
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="5">
-                                <TextBlock Text="Сеанс:" FontWeight="Bold"/>
+                                <TextBlock Text="Сеанс:" />
                                 <TextBlock Text="{Binding SessionTime}" x:Name="SessionTimeTextBlock" Margin="0 0 20 0"/>
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="5">
-                                <TextBlock Text="Выбранные места:" FontWeight="Bold"/>
+                                <TextBlock Text="Выбранные места:" />
                                 <TextBlock Text="{Binding PreviewSeats}" x:Name="SelectedSeatsTextBlock" Margin="0 0 20 0"/>
                             </StackPanel>
 

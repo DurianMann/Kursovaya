@@ -9,7 +9,7 @@ namespace Kursovaya
         {
             InitializeComponent();
             currentUser = user;
-            lblCurrentBalance.Text = $"{currentUser.Balance} руб.";
+            lblCurrentBalance.Text = $"Текущий баланс: {currentUser.Balance} руб.";
 
             // Подписываемся на событие изменения баланса
             currentUser.BalanceChanged += UpdateBalanceLabel;
